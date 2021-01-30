@@ -10,19 +10,14 @@ const Signup = () => {
     const [quest, setQuest] = useState('');
     // Récupère la réponse à la question secrète
     const [secret, setSecret] = useState('');
-    // Message d'erreur à afficher si il y a un problème dans l'api
-    const [error, setError] = useState('');
+    // Message d'erreur à afficher si il y a un problème dans le backend
+    const [errorS, setErrorS] = useState('');
 
 
     // Récupère tout les champs renseignés (Ils sont required donc pas besoin
-    // de vérifier) puis appelle l'api pour sauvegarder dans la bdd
+    // de vérifier) puis appelle le back pour sauvegarder dans la bdd
     function handleSubmit(e) {
         e.preventDefault();
-
-        console.log(quest);
-        console.log(email);
-        console.log(password);
-        console.log(secret);
 
         const user_info = {
             email: email,
@@ -31,17 +26,17 @@ const Signup = () => {
             secret: secret
         };
 
-        // On utilise l'api, renvoie ... TODO
-        axios.post('http://localhost:4000/app/', user_info)
+        // On utilise le back, renvoie ... TODO
+        axios.post('http://localhost:4000/app/auth/signup', user_info)
         .then(function(res) {
             console.log(res);
         })
         .catch(function(error) {
-            console.log(error);
+            setErrorS(error.response.data.message);
         })
     }
 
-
+    // HTML du Signup
     return(
         <div>
             <p>Petit Logo des familles</p>
@@ -85,7 +80,7 @@ const Signup = () => {
                     type='submit'
                     value='Créer un compte'
                 />
-                {error && <p>{error}</p>}
+                {errorS && <p>{errorS}</p>}
             </form>
             {/* Redirection vers la page d'identification */}
             <div>
