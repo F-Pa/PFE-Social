@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup = () => {
     // Récupère les valeurs rentrées par l'utilisateur dans le formulaire
@@ -23,35 +24,21 @@ const Signup = () => {
         console.log(password);
         console.log(secret);
 
-        // On utilise l'api, renvoie ... TODO
-        fetch('../../api/Auth/Creation', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email, 
-              password,
-              quest,
-              secret,
-            }),
-        })
-        .then((res) => {
-            console.log(res);
-            return res.json();
-        })
-        .then((data) => {
-            console.log('abod');
-            console.log(data);
-            if(data && data.error) {
-                setError(data.message);
-                console.log(data.message);
-            }
-            else {
-                console.log('idi');
-            }
-        })
+        const user_info = {
+            email: email,
+            password: password,
+            quest: quest,
+            secret: secret
+        };
 
+        // On utilise l'api, renvoie ... TODO
+        axios.post('http://localhost:4000/app/', user_info)
+        .then(function(res) {
+            console.log(res);
+        })
+        .catch(function(error) {
+            console.log(error);
+        })
     }
 
 
