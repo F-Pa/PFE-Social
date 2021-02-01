@@ -8,6 +8,8 @@ const Mdp = () => {
     /* ---------------------------------------------------------------------
     Variables
     ----------------------------------------------------------------------*/
+
+
     // Récupère les valeurs rentrées par l'utilisateur dans le formulaire
     const [email, setEmail] = useState('');
     const [quest, setQuest] = useState('');
@@ -115,6 +117,8 @@ const Mdp = () => {
     /* ---------------------------------------------------------------------
     HTML
     ----------------------------------------------------------------------*/
+    
+    
     return (
         <div>
             <p>Petit logo de la mifa</p>

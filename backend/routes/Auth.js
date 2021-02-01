@@ -1,10 +1,11 @@
 // Back pour l'authentification de l'utilisateur, il permet l'identification et la création de compte
-// Tout en gérant les tokens pour l'ensemble de l'application TODO
+// Tout en gérant les tokens pour l'ensemble de l'application
 
 const express = require('express');
 const bcrypt = require('bcrypt');
 const neo4j = require('neo4j-driver');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 const v4 = require('uuid').v4;
 
 const router = express.Router();
@@ -84,13 +85,13 @@ router.post('/signup', (req, res) => {
         // Si ce n'est pas le cas on crée l'utilisateur
         if(_.isEmpty(utils)) {
             createUser(email, password, quest, secret);
-            // const token = jwt.sign(
-            //     {userId: v4(), userEmail: email},
-            //     process.env.JWTSECRET,
-            //     {expiresIn: 3000},
-            // );
-            res.status(200).json({error: true, message: 'Ok'});
-            // res.status(200).json({token});
+            const token = jwt.sign(
+                {userId: v4(), userEmail: email},
+                process.env.JWTSECRET,
+                {expiresIn: 3000},
+            );
+            res.status(200).json({token});
+            // res.status(200).json({error: true, message: 'Ok'});
             return;
         }
         // Sinon l'utilisateur existe : on renvoie un message d'erreur
@@ -130,13 +131,13 @@ router.post('/signin', (req, res) => {
                                 res.status(500).json({error: true, message: 'Auth échoué'});
                         }
                         if (match) {
-                            // const token = jwt.sign(
-                            //     {userId: v4(), userEmail: email},
-                            //     process.env.JWTSECRET,
-                            //     {expiresIn: 3000},
-                            // );
-                            // res.status(200).json({token});
-                            res.status(200).json({error: true, message: 'Ok'});
+                            const token = jwt.sign(
+                                {userId: v4(), userEmail: email},
+                                process.env.JWTSECRET,
+                                {expiresIn: 3000},
+                            );
+                            res.status(200).json({token});
+                            // res.status(200).json({message: 'ok'});
                             return;
                         }
                         else {

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Signup from './Login/Signup';
 import Signin from './Login/Signin';
 import Mdp from './Login/MdpForgot';
+import Test from './Test';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/Signin" component={Signin}/>
         <Route path="/Signup" component={Signup}/>
         <Route path="/Oups" component={Mdp}/>
+        <Route path="/Test" component={Test}/>
       </Switch>
     </div>
   </Router>
