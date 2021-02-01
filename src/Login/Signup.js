@@ -3,17 +3,27 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Signup = () => {
+    /* ---------------------------------------------------------------------
+    Variables
+    ----------------------------------------------------------------------*/
     // Récupère les valeurs rentrées par l'utilisateur dans le formulaire
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     // Récupère la question 
     const [quest, setQuest] = useState('');
+
     // Récupère la réponse à la question secrète
     const [secret, setSecret] = useState('');
+    
     // Message d'erreur à afficher si il y a un problème dans le backend
     const [errorS, setErrorS] = useState('');
 
 
+
+    /* ---------------------------------------------------------------------
+    JS
+    ----------------------------------------------------------------------*/
     // Récupère tout les champs renseignés (Ils sont required donc pas besoin
     // de vérifier) puis appelle le back pour sauvegarder dans la bdd
     function handleSubmit(e) {
@@ -36,7 +46,11 @@ const Signup = () => {
         })
     }
 
-    // HTML du Signup
+
+
+    /* ---------------------------------------------------------------------
+    HTML
+    ----------------------------------------------------------------------*/
     return(
         <div>
             <p>Petit Logo des familles</p>

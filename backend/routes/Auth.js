@@ -217,10 +217,10 @@ router.post('/mdpQuest', (req, res) => {
                 result.records.map(record => {
                     bcrypt.compare(secret, record.get('secret'), function(err, match) {
                         if (err) {
-                                res.status(500).json({error: true, message: 'Auth échoué'});
+                            res.status(500).json({error: true, message: 'Auth échoué'});
                         }
                         if (match) {
-                            res.status(200).json({error: true, message: 'Ok'});
+                            res.status(200).json({message: 'Ok'});
                             return;
                         }
                         else {
@@ -230,6 +230,26 @@ router.post('/mdpQuest', (req, res) => {
                     })
                 })
             }
+        })
+    )
+})
+
+// Permet de changer le mot de passe de l'utilisateur
+router.post('/mdpPassword', async(req, res) => {
+    const email = req.body.email;
+    const hashP = await bcrypt.hash(req.body.password, saltRounds);
+
+    session.writeTransaction((tcx) => 
+        tcx.run(`MATCH (u:Utilisateur {Email:$userEmail})
+                SET u.Password = $userPassword
+                RETURN u.Email, u.Password`,
+            {
+                userEmail: email,
+                userPassword: hashP,
+            }
+        )
+        .then(result => {
+            return res.status(200).json({message: 'Ok'});
         })
     )
 })
