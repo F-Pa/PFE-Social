@@ -1,8 +1,6 @@
-import React from 'react';
+import React from 'react'
 import { Redirect } from 'react-router-dom';
 
-import ProfilPrincipal from './ProfilPrincipal'
-import ProfilCours from './ProfilCours'
 import NavBar from '../NavBar/NavBar'
 
 // Permet de décoder le token dans la sessionStorage
@@ -10,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const Profil = () => {
+const AffichageAmi = () => {
     // Récupère les informations du Token
     let decoded;
     const token = sessionStorage.getItem('token');
@@ -25,24 +23,24 @@ const Profil = () => {
 
     return (
         <>
-            <div>   
+            <div>
                 {/* Si l'utilisateur n'est pas connecté redirige vers la page d'indentification */}
                 { !decoded ? <Redirect to="/Signin"/> : null}
-                {/* Navbar à gauche */}
+                {/* Sinon on affiche ses amis */}
+                {/* NavBar à gauche */}
                 <div>
                     <NavBar/>
                 </div>
-                {/* Div principale avec l'affichage des informations personelles */}
                 <div>
-                    <ProfilPrincipal/>
-                </div>
-                {/* Div permettant à l'utilisateur d'upload ses cours */}
-                <div>
-                    <ProfilCours/>
+                    <ul>
+                        <li>La photo de mon ami1 / Son nom / Son Prénom  / (sa page de profil ??)</li>
+                        <li>La photo de mon ami2 / Son nom / Son Prénom  / (sa page de profil ??)</li>
+                        <li>La photo de mon ami3 / Son nom / Son Prénom  / (sa page de profil ??)</li>
+                    </ul>
                 </div>
             </div>
         </>
     )
 }
 
-export default Profil;
+export default AffichageAmi

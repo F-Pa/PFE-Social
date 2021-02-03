@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-// TODO : BACKEND fini / STYLE A FAIRE
+// Style
+import '../style/login.css';
+
+// FINI
 
 const Mdp = () => {
     /* ---------------------------------------------------------------------
@@ -99,9 +102,11 @@ const Mdp = () => {
                 var a = document.getElementById('formtrois');
                 var b = document.getElementById('fin');
                 var c = document.getElementById('identification');
+                var d = document.getElementById('hide');
                 a.style.display = "none";
                 c.style.display = "none";
                 b.style.display = "block";
+                d.style.display = "none";
             })
             .catch(function(error) {
                 setErrorMp(error.response.data.message);
@@ -120,90 +125,106 @@ const Mdp = () => {
     
     
     return (
-        <div>
-            <p>Petit logo de la mifa</p>
-            <p>Mot de passe oublié</p>
-            <p>Cela arrive même aux meilleurs, renseignez votre email et votre question secrète ci-dessous</p>
-            {/* On gère les informations */}
-            <div id="formun">
-                <form onSubmit={handleSubmitMail}>
-                    <input
-                        required
-                        type='email'
-                        placeholder='E-mail'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {/* Bouton de validation */}
-                    <input
-                        required
-                        type='submit'
-                        value='Suite'
-                    />
-                    {errorM && <p>{errorM}</p>}
-                </form>
+        <div className="login-wrap">
+            <div className="login-html">		
+                <h1 className="titre">Mot de passe oublié</h1>
+                <p className="subtitle">Cela arrive même aux meilleurs, renseignez votre email et votre question secrète ci-dessous</p>
+                {/* On gère les informations */}
+                <div className="login-form" id="formun">
+                    <form onSubmit={handleSubmitMail}>
+                        <div className="group">
+                            <label className="label">E-mail</label>
+                            <input className="input"
+                                required
+                                type='email'
+                                placeholder='E-mail'
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        {/* Bouton de validation */}
+                        <div className="group">
+                            <input className="button"
+                                required
+                                type='submit'
+                                value='Suite'
+                            />
+                        </div>
+                        {errorM && <p className="error-signin">{errorM}</p>}
+                    </form>
+                </div>
+                {/* On affiche ce form si l'utilisateur a rentré son Email */}
+                <div className="login-form" id="formdeux" style={{display: 'none'}}>
+                    <form onSubmit={handleSubmitQuest}>
+                        <div className="group">
+                            <label className="label">{quest}</label>
+                            <input className="input"
+                                id = 'secret'
+                                required
+                                type='text'
+                                value={secret}
+                                placeholder='Réponse'
+                                onChange={(e) => setSecret(e.target.value)}
+                            />
+                        </div>
+                        {/* Bouton de validation */}
+                        <div className="group">
+                            <input className="button"
+                                required
+                                type='submit'
+                                value='Valider'
+                            />
+                        </div>
+                        {errorQ && <p className="error-signin">{errorQ}</p>}
+                    </form>
+                </div>
+                {/* Et celui-ci s'il a rensigné la réponse à la question secrète */}
+                <div className="login-form" id="formtrois" style={{display: 'none'}}>
+                    <form onSubmit={handleSubmitPassword}>
+                        <div className="group">
+                            <input className="input"
+                                required
+                                type='password'
+                                value={mdp1}
+                                placeholder='Mot de passe'
+                                onChange={(e) => setMdp1(e.target.value)}
+                            />
+                        </div>
+                        <div className="group">
+                            <input className="input"
+                                required
+                                type='password'
+                                value={mdp2}
+                                placeholder='Confirmation du mot de passe'
+                                onChange={(e) => setMdp2(e.target.value)}
+                            />
+                        </div>
+                        {/* Bouton de validation */}
+                        <div className="group">
+                            <input className="button"
+                                required
+                                type='submit'
+                                value='Changer'
+                            />
+                        </div>
+                        {errorMp && <p className="error-signin">{errorMp}</p>}
+                    </form>
+                </div>
+                <div id="fin" style={{display: 'none'}}>
+                    <p className="subtitle">Le mot de passe est changé avec succès</p>
+                    <Link className="link-signin" to='/Signin'>
+                        Revenir vers la page d'identification
+                    </Link>
+                </div>
+                {/* Redirection vers la page d'identification */}
+                <div id="hide" className="hr"></div>
+                <div className="foot-lnk" id="identification">
+                    <p className="subtitle">La mémoire vous est revenue ?</p>
+                    <Link className="link-signin" to="/Signin">
+                        Revenez vous identifier
+                    </Link>
+                </div>  
             </div>
-            {/* On affiche ce form si l'utilisateur a rentré son Email */}
-            <div id="formdeux" style={{display: 'none'}}>
-                <form onSubmit={handleSubmitQuest}>
-                    <p>{quest}</p>
-                    <input
-                        id = 'secret'
-                        required
-                        type='text'
-                        value={secret}
-                        placeholder='Réponse'
-                        onChange={(e) => setSecret(e.target.value)}
-                    />
-                    {/* Bouton de validation */}
-                    <input
-                        required
-                        type='submit'
-                        value='Valider'
-                    />
-                    {errorQ && <p>{errorQ}</p>}
-                </form>
-            </div>
-            {/* Et celui-ci s'il a rensigné la réponse à la question secrète */}
-            <div id="formtrois" style={{display: 'none'}}>
-                <form onSubmit={handleSubmitPassword}>
-                    <p>Choisissez votre mot de passe avec soin</p>
-                    <input
-                        required
-                        type='password'
-                        value={mdp1}
-                        placeholder='Mot de passe'
-                        onChange={(e) => setMdp1(e.target.value)}
-                    />
-                    <input
-                        required
-                        type='password'
-                        value={mdp2}
-                        placeholder='Mot de passe'
-                        onChange={(e) => setMdp2(e.target.value)}
-                    />
-                    {/* Bouton de validation */}
-                    <input
-                        required
-                        type='submit'
-                        value='Changer'
-                    />
-                    {errorMp && <p>{errorMp}</p>}
-                </form>
-            </div>
-            <div id="fin" style={{display: 'none'}}>
-                <p>Le mot de passe est changé avec succès</p>
-                <Link to='/Signin'>
-                    Revenir vers la page d'identification
-                </Link>
-            </div>
-            {/* Redirection vers la page d'identification */}
-            <div id="identification">
-                <p>La mémoire vous est revenue ?</p>
-                <Link to="/Signin">
-                    Revenez vous identifier
-                </Link>
-            </div>  
         </div>
     )
 }

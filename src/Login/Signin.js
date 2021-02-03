@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-// TODO : BACKEND fini / STYLE A FAIRE
+// Style
+import '../style/login.css';
+
+// FINI
 
 const Signin = () => {
     /* ---------------------------------------------------------------------
@@ -67,48 +70,61 @@ const Signin = () => {
     return (
         <>
             {/* Si l'utilisateur s'est identifié redirige vers la page de profil */}
-            {redirection ? <Redirect to="/Test"/> : null}
-            <div>
-                <p>Petit Logo des familles</p>
-                <p>S'identifier</p>
-                <p>Tenez-vous au courant des évolutions d'AMU</p>
-                {/* On gère le Signin */}
-                <form onSubmit={handleSubmit}>
-                    <input 
-                        required
-                        type='email'
-                        placeholder='E-mail'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        required
-                        type='password'
-                        placeholder='Mot de passe'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {/* Bouton de validation */}
-                    <input
-                        type='submit'
-                        value="S'identifier"
-                    />
-                    {errorSi && <p>{errorSi}</p>}                
-                </form>
-                {/* Utilise la question secrète */}
-                <div>
-                    <Link to="/Oups">
-                        Mot de passe oublié
-                    </Link>
+            {redirection ? <Redirect to="/Test"/> : null}        
+            <div className="login-wrap">
+                <div className="login-html">
+                    <h1 className="titre">S'identifier</h1>
+                    <p className="subtitle">Tenez-vous au courant des évolutions de vos universités</p>		
+                    <div className="login-form">
+                        <div className="sign-in-htm">
+                            <form onSubmit={handleSubmit}>
+                                <div className="group">
+                                    <label className="label">E-mail</label>
+                                    <input className="input"
+                                        required
+                                        type='email'
+                                        placeholder='E-mail'
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </div>
+                                <div className="group">
+                                    <label className="label">Mot de passe</label>
+                                    <input className="input"
+                                        required
+                                        type='password'
+                                        placeholder='Mot de passe'
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </div>
+                                {/* Bouton de validation */}
+                                <div className="group">
+                                    <input className="button"
+                                        type='submit'
+                                        value="S'identifier"
+                                    />
+                                </div>
+                                {errorSi && <p className="error-signin">{errorSi}</p>}
+                            </form>
+                            {/* Utilise la question secrète */}
+                            <div className="mdp-forgot">
+                                <Link className="link-signin" to="/Oups">
+                                    Mot de passe oublié ?
+                                </Link>
+                            </div>
+                            <div className="hr"></div>
+                            {/* Redirection vers la page d'inscription */}
+                            <div className="foot-lnk">
+                                <label className="subtitle" for="tab-2">Nouveau sur AmuSoc ? </label>
+                                <Link className="link-signin" to="/Signup">
+                                    S'inscrire
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {/* Redirection vers la page d'inscription */}
-                <div>
-                    <p>Nouveau sur AMUSoc ?</p>
-                    <Link to="/Signup">
-                        S'inscrire
-                    </Link>
-                </div>        
-            </div>
+            </div> 
         </>
     )
 }

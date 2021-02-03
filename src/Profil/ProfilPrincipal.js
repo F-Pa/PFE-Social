@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// TODO : BACKEND fini / STYLE A FAIRE / LIER PROFIL ET UTILISATEUR
+// TODO : BACKEND fini / STYLE A FAIRE
 
 
 const ProfilPrincipal = () => {
@@ -138,72 +138,79 @@ const ProfilPrincipal = () => {
 
 
     return (
-        <>
-            {/* Div centrale avec les informations à modifier */}
-            <div>
-                {/* Affichage normal des informations */}
-                <div id='data'>
-                    <h1>Bienvenue {decoded.userPrenom} {decoded.userNom}</h1>
-                    <p>Ville : {villebd}</p>
-                    <p>Ecole : {ecolebd}</p>
-                    <p>Filière : {filierebd}</p>
-                    <p> Site Web : </p>
-                    <a href={sitebd} target="_blank" rel="noreferrer">Mon site</a>
-                    <p> Matière enseignée : {matierebd}</p>
-                    <form onSubmit={handleModifyProfil}>
-                        <input
-                            type= 'submit'
-                            value='Modifier mes infos'
-                        />
-                    </form>
-                </div>
-                {/* On affiche cette div si l'utilisateur a souhaité modifier des informations */}
-                <div id="modify" style={{display: 'none'}}>
-                    <form onSubmit={handleDataProfil}>
-                        <h1> Renseignez les champs suivants : </h1>
-                        <label>Ville : </label>
-                        <input 
-                            type='text'
-                            placeholder='Ville'
-                            value={ville}
-                            onChange={(e) => setVille(e.target.value)}
-                        />
-                        <label>Ecole : </label>
-                        <input 
-                            type='text'
-                            placeholder='Ecole'
-                            value={ecole}
-                            onChange={(e) => setEcole(e.target.value)}
-                        />
-                        <label>Filière : </label>
-                        <input 
-                            type='text'
-                            placeholder='Filière'
-                            value={filiere}
-                            onChange={(e) => setFiliere(e.target.value)}
-                        />
-                        <label>Site : </label>
-                        <input 
-                            type='text'
-                            placeholder='Adresse du site web'
-                            value={site}
-                            onChange={(e) => setSite(e.target.value)}
-                        />
-                        <label>Matière : </label>
-                        <input 
-                            type='text'
-                            placeholder='Matière enseignée'
-                            value={matiere}
-                            onChange={(e) => setMatiere(e.target.value)}
-                        />
-                        <input
-                            type='submit'
-                            value='Enregistrer'
-                        />
-                    </form>
-                </div>
-            </div>
-        </>
+        <div>
+            {decoded && (
+                <>
+                    {/* Div centrale avec les informations à modifier */}
+                    <div>
+                        {/* Affichage normal des informations */}
+                        <div id='data'>
+                            <h1>Bienvenue {decoded.userPrenom} {decoded.userNom}</h1>
+                            <p>Ville : {villebd}</p>
+                            <p>Ecole : {ecolebd}</p>
+                            <p>Filière : {filierebd}</p>
+                            <p> Site Web : </p>
+                            <a href={sitebd} target="_blank" rel="noreferrer">Mon site</a>
+                            <p> Matière enseignée : {matierebd}</p>
+                            <form onSubmit={handleModifyProfil}>
+                                <input
+                                    type= 'submit'
+                                    value='Modifier mes infos'
+                                />
+                            </form>
+                        </div>
+                        {/* On affiche cette div si l'utilisateur a souhaité modifier des informations */}
+                        <div id="modify" style={{display: 'none'}}>
+                            <form onSubmit={handleDataProfil}>
+                                <h1> Renseignez les champs suivants : </h1>
+                                <label>Ville : </label>
+                                <input 
+                                    type='text'
+                                    placeholder='Ville'
+                                    value={ville}
+                                    onChange={(e) => setVille(e.target.value)}
+                                />
+                                <label>Ecole : </label>
+                                <input 
+                                    type='text'
+                                    placeholder='Ecole'
+                                    value={ecole}
+                                    onChange={(e) => setEcole(e.target.value)}
+                                />
+                                <label>Filière : </label>
+                                <input 
+                                    type='text'
+                                    placeholder='Filière'
+                                    value={filiere}
+                                    onChange={(e) => setFiliere(e.target.value)}
+                                />
+                                <label>Site : </label>
+                                <input 
+                                    type='text'
+                                    placeholder='Adresse du site web'
+                                    value={site}
+                                    onChange={(e) => setSite(e.target.value)}
+                                />
+                                <label>Matière : </label>
+                                <input 
+                                    type='text'
+                                    placeholder='Matière enseignée'
+                                    value={matiere}
+                                    onChange={(e) => setMatiere(e.target.value)}
+                                />
+                                <input
+                                    type='submit'
+                                    value='Enregistrer'
+                                />
+                            </form>
+                        </div>
+                    </div>
+                </>
+            )}
+            {!decoded && ( 
+                <div></div>
+            )}
+        </div>
     )
 }
 

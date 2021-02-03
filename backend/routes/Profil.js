@@ -4,7 +4,6 @@
 const express = require('express');
 const neo4j = require('neo4j-driver');
 const dotenv = require('dotenv');
-const v4 = require('uuid').v4;
 
 const router = express.Router();
 dotenv.config();
@@ -16,6 +15,7 @@ const _ = require('lodash');
 // On se connecte au driver neo4j, Nécéssite la clé (.env)
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', process.env.DB_UTIL_PASS));
 const session = driver.session();
+const session2 = driver.session();
 
 
 /*--------------------------------------------------------------------
@@ -104,6 +104,24 @@ function createProfil(id, ville, ecole, filiere, site, matiere) {
     )
 }
 
+// crée la relation entre l'utilisateur et le profil
+function createRelationProfil(id) {
+    session2.writeTransaction((tcx) => 
+        tcx.run(`MATCH (u:Utilisateur)
+                WITH u
+                MATCH (p:Profil)
+                WHERE u.Id = p.Id = $userId
+                CREATE (u)-[r:A_POUR_PROFIL {Id:$userId}]->(p)`,
+            {
+                userId: id
+            }
+        )
+        .catch(error => {
+            throw error;
+        })
+    )
+}
+
 
 // Modifie le profil 
 function modifyProfil(id, ville, ecole, filiere, site, matiere) {
@@ -160,6 +178,7 @@ router.post('/createProfil', (req, res) => {
         // Si ce n'est pas le cas on crée le profil
         if(_.isEmpty(utils)) {
             createProfil(id, ville, ecole, filiere, site, matiere);
+            createRelationProfil(id);
             return res.status(200).json({message: 'ok'})
         }
         // Sinon on modifie l'utilisateur

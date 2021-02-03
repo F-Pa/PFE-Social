@@ -5,7 +5,9 @@ import Signup from './Login/Signup';
 import Signin from './Login/Signin';
 import Mdp from './Login/MdpForgot';
 import Test from './Test';
-import Profil from './Profil/Profil'
+import Profil from './Profil/Profil';
+import AffichageAmi from './Amis/AffichageAmi';
+import Amis from './Amis/Amis'
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/Oups" component={Mdp}/>
         <Route path="/Test" component={Test}/>
         <Route path="/Profil" component={Profil}/>
+        <Route path="/MesAmis" component={AffichageAmi}/>
+        <Route path="/Rencontre" component={Amis}/>
       </Switch>
     </div>
   </Router>
