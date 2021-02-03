@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import '../style/login.css';
 
 // TODO : BACKEND fini / STYLE A FAIRE
 
@@ -67,48 +68,56 @@ const Signin = () => {
     return (
         <>
             {/* Si l'utilisateur s'est identifié redirige vers la page de profil */}
-            {redirection ? <Redirect to="/Test"/> : null}
-            <div>
-                <p>Petit Logo des familles</p>
-                <p>S'identifier</p>
-                <p>Tenez-vous au courant des évolutions d'AMU</p>
-                {/* On gère le Signin */}
-                <form onSubmit={handleSubmit}>
-                    <input 
-                        required
-                        type='email'
-                        placeholder='E-mail'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        required
-                        type='password'
-                        placeholder='Mot de passe'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {/* Bouton de validation */}
-                    <input
-                        type='submit'
-                        value="S'identifier"
-                    />
-                    {errorSi && <p>{errorSi}</p>}                
-                </form>
-                {/* Utilise la question secrète */}
-                <div>
-                    <Link to="/Oups">
-                        Mot de passe oublié
-                    </Link>
-                </div>
-                {/* Redirection vers la page d'inscription */}
-                <div>
-                    <p>Nouveau sur AMUSoc ?</p>
-                    <Link to="/Signup">
-                        S'inscrire
-                    </Link>
-                </div>        
-            </div>
+            {redirection ? <Redirect to="/Test"/> : null}        
+            <div class="login-wrap">
+                <div class="login-html">
+                    <h1 class="titre">CONNEXION</h1>		
+                        <div class="login-form">
+                            <div class="sign-in-htm">
+                                <form onSubmit={handleSubmit}>
+                                    <div class="group">
+                                        <label class="label">E-mail</label>
+                                        <input class="input"
+                                            required
+                                            type='email'
+                                            placeholder='E-mail'
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </div>
+                                    <div class="group">
+                                        <label class="label">Mot de passe</label>
+                                        <input class="input"
+                                            required
+                                            type='password'
+                                            placeholder='Mot de passe'
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                    </div>
+                                    <p>
+                                        <Link to="/Oups">
+                                            Mot de passe oublié ?
+                                        </Link>
+                                    </p>
+                                    <div class="group">
+                                        <input class="button"
+                                            type='submit'
+                                            value="S'identifier"
+                                        />
+                                    </div>
+                                </form>
+                                <div class="hr"></div>
+                                <div class="foot-lnk">
+                                    <label for="tab-2">Nouveau sur AmuSoc ? </label>
+                                    <Link to="/Signup">
+                                        S'inscrire
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
         </>
     )
 }

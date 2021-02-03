@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import '../style/login.css';
 
 // TODO : BACKEND fini / STYLE A FAIRE
 
@@ -120,26 +121,30 @@ const Mdp = () => {
     
     
     return (
-        <div>
-            <p>Petit logo de la mifa</p>
-            <p>Mot de passe oublié</p>
+    <div class="login-wrap">
+	<div class="login-html">		
+            <h1 class="titre">MOT DE PASSE OUBLIE</h1>
             <p>Cela arrive même aux meilleurs, renseignez votre email et votre question secrète ci-dessous</p>
             {/* On gère les informations */}
-            <div id="formun">
+            <div class="login-form" id="formun">
                 <form onSubmit={handleSubmitMail}>
-                    <input
+                    <div class="group">
+                    <input class="input"
                         required
                         type='email'
                         placeholder='E-mail'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
+                    </div>
                     {/* Bouton de validation */}
-                    <input
+                    <div class="group">
+                    <input class="button"
                         required
                         type='submit'
                         value='Suite'
                     />
+                    </div>
                     {errorM && <p>{errorM}</p>}
                 </form>
             </div>
@@ -147,7 +152,7 @@ const Mdp = () => {
             <div id="formdeux" style={{display: 'none'}}>
                 <form onSubmit={handleSubmitQuest}>
                     <p>{quest}</p>
-                    <input
+                    <input class="input"
                         id = 'secret'
                         required
                         type='text'
@@ -156,7 +161,7 @@ const Mdp = () => {
                         onChange={(e) => setSecret(e.target.value)}
                     />
                     {/* Bouton de validation */}
-                    <input
+                    <input class="button"
                         required
                         type='submit'
                         value='Valider'
@@ -168,14 +173,14 @@ const Mdp = () => {
             <div id="formtrois" style={{display: 'none'}}>
                 <form onSubmit={handleSubmitPassword}>
                     <p>Choisissez votre mot de passe avec soin</p>
-                    <input
+                    <input class="input"
                         required
                         type='password'
                         value={mdp1}
                         placeholder='Mot de passe'
                         onChange={(e) => setMdp1(e.target.value)}
                     />
-                    <input
+                    <input class="input"
                         required
                         type='password'
                         value={mdp2}
@@ -183,7 +188,7 @@ const Mdp = () => {
                         onChange={(e) => setMdp2(e.target.value)}
                     />
                     {/* Bouton de validation */}
-                    <input
+                    <input class="button"
                         required
                         type='submit'
                         value='Changer'
@@ -198,12 +203,14 @@ const Mdp = () => {
                 </Link>
             </div>
             {/* Redirection vers la page d'identification */}
-            <div id="identification">
+            <div class="hr"></div>
+            <div class="foot-lnk" id="identification">
                 <p>La mémoire vous est revenue ?</p>
                 <Link to="/Signin">
                     Revenez vous identifier
                 </Link>
             </div>  
+        </div>
         </div>
     )
 }
