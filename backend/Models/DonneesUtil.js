@@ -1,10 +1,8 @@
 const _ = require('lodash');
 
-function DonneesUtil(id, nom, prenom, ville, ecole, filiere, site, matiere) {
+function DonneesUtil(id, ville, ecole, filiere, site, matiere) {
     _.extend(this, {
         id: id,
-        nom: nom,
-        prenom: prenom,
         ville: ville,
         ecole: ecole,
         filiere: filiere,

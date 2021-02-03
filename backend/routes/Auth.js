@@ -49,15 +49,18 @@ function findUser(email) {
 
 // Crée l'utilisateur (hash le mot de passe et la réponse à la question secrète
 // pour plus de sécurité)
-async function createUser(email, password, quest, secret, idUnique) {
+async function createUser(email, password, nom, prenom, quest, secret, idUnique) {
     const hashP = await bcrypt.hash(password, saltRounds);
     const hashS = await bcrypt.hash(secret, saltRounds);
     session.writeTransaction((tcx) =>
-        tcx.run(`CREATE (u:Utilisateur {Id:$userId, Email:$userEmail, Password:$userPassword, Quest:$userQuest, Secret:$userSecret})`,
+        tcx.run(`CREATE (u:Utilisateur {Id:$userId, Email:$userEmail, Password:$userPassword, 
+                Nom:$userNom, Prenom:$userPrenom, Quest:$userQuest, Secret:$userSecret})`,
             {
                 userId: idUnique,
                 userEmail: email,
                 userPassword: hashP,
+                userNom: nom,
+                userPrenom: prenom,
                 userQuest: quest,
                 userSecret: hashS
             }
@@ -74,25 +77,24 @@ async function createUser(email, password, quest, secret, idUnique) {
 router.post('/signup', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+    const nom = req.body.nom;
+    const prenom = req.body.prenom;
     const quest = req.body.quest;
     const secret = req.body.secret;
     const idUnique = v4();
-
-    console.log(email);
 
     // Cherche si l'utilisateur existe
     findUser(email)
     .then(utils => {
         // Si ce n'est pas le cas on crée l'utilisateur
         if(_.isEmpty(utils)) {
-            createUser(email, password, quest, secret, idUnique);
+            createUser(email, password, nom, prenom, quest, secret, idUnique);
             const token = jwt.sign(
-                {userId: idUnique, userEmail: email},
+                {userId: idUnique, userEmail: email, userNom: nom, userPrenom: prenom},
                 process.env.JWTSECRET,
                 {expiresIn: 3000},
             );
             res.status(200).json({token});
-            // res.status(200).json({error: true, message: 'Ok'});
             return;
         }
         // Sinon l'utilisateur existe : on renvoie un message d'erreur
@@ -118,7 +120,7 @@ router.post('/signin', (req, res) => {
     // On vérifie si l'utilisateur existe
     session.readTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Email:$userEmail})
-                RETURN u.Id as id, u.Email as email, u.Password as password`,
+                RETURN u.Id as id, u.Email as email, u.Password as password, u.Nom as nom, u.Prenom as prenom`,
             {
                 userEmail: email
             }
@@ -135,12 +137,11 @@ router.post('/signin', (req, res) => {
                         }
                         if (match) {
                             const token = jwt.sign(
-                                {userId: record.get('id'), userEmail: email},
+                                {userId: record.get('id'), userEmail: email, userNom: record.get('nom'), userPrenom: record.get('prenom')},
                                 process.env.JWTSECRET,
                                 {expiresIn: 3000},
                             );
                             res.status(200).json({token});
-                            // res.status(200).json({message: 'ok'});
                             return;
                         }
                         else {

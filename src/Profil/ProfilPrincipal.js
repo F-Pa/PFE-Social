@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// TODO : BACKEND fini / STYLE A FAIRE
+// TODO : BACKEND fini / STYLE A FAIRE / LIER PROFIL ET UTILISATEUR
 
 
 const ProfilPrincipal = () => {
@@ -16,8 +16,6 @@ const ProfilPrincipal = () => {
 
 
     // Récupère les valeurs dans la base de données pour le profil principal
-    const [nombd, setNombd] = useState('');
-    const [prenombd, setPrenombd] = useState('');
     const [villebd, setVillebd] = useState('');
     const [ecolebd, setEcolebd] = useState('');
     const [filierebd, setFilierebd] = useState('');
@@ -26,8 +24,6 @@ const ProfilPrincipal = () => {
 
     // Récupère les valeurs rentrées par l'utilisateur lors de la modification
     // de son profil principal
-    const [nom, setNom] = useState('');
-    const [prenom, setPrenom] = useState('');
     const [ville, setVille] = useState('');
     const [ecole, setEcole] = useState('');
     const [filiere, setFiliere] = useState('');
@@ -74,12 +70,6 @@ const ProfilPrincipal = () => {
             .then(function(res) {
                 // on vérifie que chaque champ est renseigné, si ce n'est pas le 
                 // cas il est inutile de le modifier
-                if(res.data.data.nom) {
-                    setNombd(res.data.data.nom);
-                }
-                if(res.data.data.prenom) {
-                    setPrenombd(res.data.data.prenom);
-                }
                 if(res.data.data.ville) {
                     setVillebd(res.data.data.ville);
                 }
@@ -121,8 +111,6 @@ const ProfilPrincipal = () => {
         if(decoded) {          
             const user_info2 = {
                 id: decoded.userId,
-                nom: nom,
-                prenom: prenom,
                 ville: ville,
                 ecole: ecole,
                 filiere: filiere,
@@ -155,12 +143,12 @@ const ProfilPrincipal = () => {
             <div>
                 {/* Affichage normal des informations */}
                 <div id='data'>
-                    <h1>Bienvenue {nombd} {prenombd}</h1>
+                    <h1>Bienvenue {decoded.userPrenom} {decoded.userNom}</h1>
                     <p>Ville : {villebd}</p>
                     <p>Ecole : {ecolebd}</p>
                     <p>Filière : {filierebd}</p>
                     <p> Site Web : </p>
-                    <a href={sitebd} target="_blank">Mon site</a>
+                    <a href={sitebd} target="_blank" rel="noreferrer">Mon site</a>
                     <p> Matière enseignée : {matierebd}</p>
                     <form onSubmit={handleModifyProfil}>
                         <input
@@ -173,20 +161,6 @@ const ProfilPrincipal = () => {
                 <div id="modify" style={{display: 'none'}}>
                     <form onSubmit={handleDataProfil}>
                         <h1> Renseignez les champs suivants : </h1>
-                        <label>Nom : </label>
-                        <input 
-                            type='text'
-                            placeholder='Nom'
-                            value={nom}
-                            onChange={(e) => setNom(e.target.value)}
-                        />
-                        <label>Prénom : </label>
-                        <input 
-                            type='text'
-                            placeholder='Prénom'
-                            value={prenom}
-                            onChange={(e) => setPrenom(e.target.value)}
-                        />
                         <label>Ville : </label>
                         <input 
                             type='text'

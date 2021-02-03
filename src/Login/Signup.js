@@ -13,6 +13,8 @@ const Signup = () => {
     // Récupère les valeurs rentrées par l'utilisateur dans le formulaire
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [nom, setNom] = useState('');
+    const [prenom, setPrenom] = useState('');
 
     // Récupère la question 
     const [quest, setQuest] = useState('');
@@ -51,6 +53,8 @@ const Signup = () => {
         const user_info = {
             email: email,
             password: password,
+            nom: nom,
+            prenom: prenom,
             quest: quest,
             secret: secret
         };
@@ -95,6 +99,20 @@ const Signup = () => {
                         placeholder='Mot de passe'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <input
+                        required  
+                        type='text'
+                        placeholder='Nom'
+                        value={nom}
+                        onChange={(e) => setNom(e.target.value)}
+                    />
+                    <input
+                        required
+                        type='text'
+                        placeholder='Prénom'
+                        value={prenom}
+                        onChange={(e) => setPrenom(e.target.value)}
                     />
                     <p>Question secrète</p>
                     {/* Ici le select avec les différentes questions */}
