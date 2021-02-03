@@ -5,6 +5,7 @@ import Signup from './Login/Signup';
 import Signin from './Login/Signin';
 import Mdp from './Login/MdpForgot';
 import Test from './Test';
+import Profil from './Profil/Profil'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/Signup" component={Signup}/>
         <Route path="/Oups" component={Mdp}/>
         <Route path="/Test" component={Test}/>
+        <Route path="/Profil" component={Profil}/>
       </Switch>
     </div>
   </Router>

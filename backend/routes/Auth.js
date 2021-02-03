@@ -49,13 +49,13 @@ function findUser(email) {
 
 // Crée l'utilisateur (hash le mot de passe et la réponse à la question secrète
 // pour plus de sécurité)
-async function createUser(email, password, quest, secret) {
+async function createUser(email, password, quest, secret, idUnique) {
     const hashP = await bcrypt.hash(password, saltRounds);
     const hashS = await bcrypt.hash(secret, saltRounds);
     session.writeTransaction((tcx) =>
         tcx.run(`CREATE (u:Utilisateur {Id:$userId, Email:$userEmail, Password:$userPassword, Quest:$userQuest, Secret:$userSecret})`,
             {
-                userId: v4(),
+                userId: idUnique,
                 userEmail: email,
                 userPassword: hashP,
                 userQuest: quest,
@@ -76,6 +76,7 @@ router.post('/signup', (req, res) => {
     const password = req.body.password;
     const quest = req.body.quest;
     const secret = req.body.secret;
+    const idUnique = v4();
 
     console.log(email);
 
@@ -84,9 +85,9 @@ router.post('/signup', (req, res) => {
     .then(utils => {
         // Si ce n'est pas le cas on crée l'utilisateur
         if(_.isEmpty(utils)) {
-            createUser(email, password, quest, secret);
+            createUser(email, password, quest, secret, idUnique);
             const token = jwt.sign(
-                {userId: v4(), userEmail: email},
+                {userId: idUnique, userEmail: email},
                 process.env.JWTSECRET,
                 {expiresIn: 3000},
             );
@@ -102,9 +103,11 @@ router.post('/signup', (req, res) => {
     })
 })
 
+
 /* ---------------------------------------------------------------------
 Identification (Signin)
 ----------------------------------------------------------------------*/
+
 
 // Permet d'authentifier l'utilisateur, renvoie un message d'erreur si ce dernier
 // n'est pas dans la bdd, sinon un token pour utiliser l'application
@@ -115,7 +118,7 @@ router.post('/signin', (req, res) => {
     // On vérifie si l'utilisateur existe
     session.readTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Email:$userEmail})
-                RETURN u.Email as email, u.Password as password`,
+                RETURN u.Id as id, u.Email as email, u.Password as password`,
             {
                 userEmail: email
             }
@@ -132,7 +135,7 @@ router.post('/signin', (req, res) => {
                         }
                         if (match) {
                             const token = jwt.sign(
-                                {userId: v4(), userEmail: email},
+                                {userId: record.get('id'), userEmail: email},
                                 process.env.JWTSECRET,
                                 {expiresIn: 3000},
                             );
