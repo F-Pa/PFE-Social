@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const Test = () => {
+const Test = (props) => {
 
     let decoded;
     const token = sessionStorage.getItem('token');
@@ -17,13 +17,14 @@ const Test = () => {
             console.error(e);
         }
     }
-    console.log(decoded);
+    console.log(props.match.params.id);
     
     return (
         <div>
             {decoded && (
                 <>
                     <p>Bienvenue {decoded.userEmail}</p>
+                    <p>Vous Etes {props.match.params.id}</p>
                 </>
             )}
             {!decoded && (

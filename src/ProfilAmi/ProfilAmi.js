@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import ProfilPrincipal from './ProfilPrincipal'
-import ProfilCours from './ProfilCours'
+import ProfilPrincipalAmi from './ProfilPrincipalAmi'
+import ProfilCoursAmi from './ProfilCoursAmi'
 import NavBar from '../NavBar/NavBar'
 
 // Permet de décoder le token dans la sessionStorage
@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const Profil = () => {
+const ProfilAmi = (props) => {
     // Récupère les informations du Token
     let decoded;
     const token = sessionStorage.getItem('token');
@@ -34,15 +34,17 @@ const Profil = () => {
                 </div>
                 {/* Div principale avec l'affichage des informations personelles */}
                 <div className="test">
-                    <ProfilPrincipal/>
-                </div>
-                {/* Div permettant à l'utilisateur d'upload ses cours */}
-                <div className="test">
-                    <ProfilCours/>
+                    <div>
+                        <ProfilPrincipalAmi props={props}/>
+                    </div>
+                    {/* Div permettant à l'utilisateur d'upload ses cours */}
+                    <div>
+                        <ProfilCoursAmi/>
+                    </div>
                 </div>
             </div>
         </>
     )
 }
 
-export default Profil;
+export default ProfilAmi;

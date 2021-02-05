@@ -119,11 +119,12 @@ const ProfilPrincipal = () => {
             }
             axios.post('http://localhost:4000/app/profil/createProfil', user_info2)
             .then(function(res) {
-                getBdd();
-                var a = document.getElementById('data');
-                var b = document.getElementById('modify');
-                a.style.display = "block";
-                b.style.display = "none";
+                // getBdd();
+                // var a = document.getElementById('data');
+                // var b = document.getElementById('modify');
+                // a.style.display = "block";
+                // b.style.display = "none";
+                window.location.reload();
             })
             .catch(function(error) {
                 console.log(error);
@@ -143,6 +144,9 @@ const ProfilPrincipal = () => {
                 <>
                     {/* Div centrale avec les informations à modifier */}
                     <div>
+                        <div>
+                            <p>Image des familles</p>
+                        </div>
                         {/* Affichage normal des informations */}
                         <div id='data'>
                             <h1>Bienvenue {decoded.userPrenom} {decoded.userNom}</h1>

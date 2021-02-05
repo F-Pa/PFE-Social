@@ -70,7 +70,7 @@ const Signin = () => {
     return (
         <>
             {/* Si l'utilisateur s'est identifié redirige vers la page de profil */}
-            {redirection ? <Redirect to="/Test"/> : null}        
+            {redirection ? <Redirect to="/Profil"/> : null}        
             <div className="login-wrap">
                 <div className="login-html">
                     <h1 className="titre">S'identifier</h1>

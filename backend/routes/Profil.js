@@ -23,6 +23,31 @@ Profil Principal
 --------------------------------------------------------------------*/
 
 
+// Récupère le nom et le prénom de l'utilisateur
+router.post('/getName', (req, res) => {
+    session2.readTransaction((tcx) => 
+        tcx.run(`MATCH (u:Utilisateur {Id:$userId})
+                RETURN u.Nom as nom, u.Prenom as prenom`,
+            {
+                userId: req.body.id
+            }    
+        )
+        .then(result => {
+            result.records.map(record => {
+                const data = {
+                    nom: record.get('nom'),
+                    prenom: record.get('prenom')
+                }
+                return res.status(200).json({data})
+            })
+        })
+        .catch(error => {
+            throw error;
+        })
+    )
+})
+
+
 // Permet de récupérer les données enregistrées dans la base de données
 // Pour les afficher ensuite à l'écran 
 router.post('/getBdd', (req, res) => {
@@ -57,6 +82,9 @@ router.post('/getBdd', (req, res) => {
                     return res.status(200).json({data})
                 })
             }
+        })
+        .catch(error => {
+            throw error;
         })
     )
 })

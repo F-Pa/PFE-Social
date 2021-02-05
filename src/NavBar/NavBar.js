@@ -1,21 +1,69 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import '../style/navbar.css';
+
+import logo from './test.jpg';
+
+// FINI
 
 const NavBar = () => {
     return (
-        //  TODO Div à gauche avec photo de profil, amis et centre d'intérêts (SIDEBAR)
-        <div>
-            <p>Photo de profil TMTC</p>
-            <p>Nom Prénom</p>
-            {/* Les liens vers les autres pages */}
-            <div>
-                <p>Page d'accueil</p>
-                <p>Profil</p>
-                <p>Mes amis</p>
-                <p>Ajouter des connaissances</p>
-                <p>Messagerie</p>
-                <p>Etc ...</p>
-            </div>
-        </div>
+       <aside className="sidebar">
+        <nav className="nav"> 
+                <div className="photo-profil">
+                    <img alt='' className="img-nav" src={logo}/>
+                </div>
+                <div className="nom">
+                    <h1 className="h1-nav">
+                        John Smith
+                    </h1>
+                </div>
+                <hr className="hr-nav"></hr>
+                {/* Les liens vers les autres pages */}
+                <Link>
+                    <div className="lien">
+                        <p className="text-nav">
+                            Page d'accueil
+                        </p>
+                    </div>
+                </Link>
+                <Link>
+                    <div className="lien">
+                        <p className="text-nav">
+                            Profil
+                        </p>
+                    </div>
+                </Link>
+                <Link>
+                    <div className="lien">
+                        <p className="text-nav">
+                            Mes amis
+                        </p>
+                    </div>
+                </Link>
+                <Link>
+                    <div className="lien">
+                        <p className="text-nav">
+                            Ajouter des amis
+                        </p>
+                    </div>
+                </Link>
+                <Link>
+                    <div className="lien">
+                        <p className="text-nav">
+                            Ma messagerie
+                        </p>
+                    </div>
+                </Link>
+                <Link>
+                    <div className="lien">
+                        <p className="text-nav">
+                            Etc ...
+                        </p>
+                    </div>
+                </Link>
+            </nav>
+        </aside>
     )
 }
 

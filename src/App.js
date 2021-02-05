@@ -8,6 +8,8 @@ import Test from './Test';
 import Profil from './Profil/Profil';
 import AffichageAmi from './Amis/AffichageAmi';
 import Amis from './Amis/Amis'
+import ProfilAmi from './ProfilAmi/ProfilAmi'
+import NavBar from './NavBar/NavBar';
 
 function App() {
   return (
@@ -18,10 +20,12 @@ function App() {
         <Route path="/Signin" component={Signin}/>
         <Route path="/Signup" component={Signup}/>
         <Route path="/Oups" component={Mdp}/>
-        <Route path="/Test" component={Test}/>
+        <Route path="/Test/:id" component={Test}/>
         <Route path="/Profil" component={Profil}/>
         <Route path="/MesAmis" component={AffichageAmi}/>
         <Route path="/Rencontre" component={Amis}/>
+        <Route path="/Navbar" component={NavBar}/>
+        <Route path="/ProfilUtilisateur/:id" component={ProfilAmi}/>
       </Switch>
     </div>
   </Router>

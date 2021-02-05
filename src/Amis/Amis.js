@@ -10,7 +10,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // TODO : Systeme de recommendation pour optimiser la recherche
-// TODO : Lien vers la page de profil pour chaque ami (idem AffichageAmi)
+// TODO : système de notifications pour l'ajout des amis
+// TODO : Affichage des images utilisateur (idem AffichageAmi)
 // BACKEND fini
 // TODO : STYLE A FAIRE
 
@@ -23,9 +24,16 @@ const Amis = () => {
     // Récupère les informations sur les personnes qui sont dans la base
     // de données pour les afficher
     const [resultat, setResultat] = useState();
+    // Et les résultats de la recherche
+    const [resultatR, setResultatR] = useState();
+
+    // Récupère les noms et prénoms pour la recherche de personne
+    const [nom, setNom] = useState('');
+    const [prenom, setPrenom] = useState('');
 
     // Affiche une erreur si personne n'a été trouvée
     const [errorM, setErrorM] = useState('');
+    const [errorR, setErrorR] = useState('');
 
 
     /* ---------------------------------------------------------------------
@@ -55,7 +63,6 @@ const Amis = () => {
     // Cette fonction permet de rechercher les autres personnes dans la bdd
     // Elle est optimisée avec un système de recommandation (TODO)
     function getPersonne() {
-        // e.preventDefault();
         // Si il y a un token 
         if(decoded) {
             const user_info = {
@@ -95,6 +102,31 @@ const Amis = () => {
         }
     }
 
+    // Permet de rechercher une personne par son nom et/ou son prénom
+    function searchFriend(e) {
+        e.preventDefault();
+        if(decoded) {
+            const user_info3 = {
+                id: decoded.userId,
+                nom: nom,
+                prenom: prenom
+            }
+            axios.post('http://localhost:4000/app/amis/searchFriend', user_info3)
+            .then(function(res) {
+                setErrorR('');
+                setResultatR(res.data.resultat);
+            })
+            .catch(function(error) {
+                console.log('popo');
+                setErrorR(error.response.data.message);
+            })
+            if(resultatR) {
+                var c = document.getElementById('res-re');
+                c.style.display = 'block';
+            }
+        }
+    }
+
 
     /* ---------------------------------------------------------------------
     HTML
@@ -110,12 +142,73 @@ const Amis = () => {
                         <div>
                             <NavBar/>
                         </div>
-                        <div>
+                        <div className="test">
                             {/* Permet la recherche d'une personne en particulier pour 
                             l'ajouter en ami (recherche par nom et/ou prénom) */}
                             <div>
+                                <p>Rechercher une personne en particulier</p>
+                                <form onSubmit={searchFriend}>
+                                    <label>Nom</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Nom"
+                                        value={nom}
+                                        onChange={(e) => setNom(e.target.value)}
+                                    />
+                                    <label>Prénom</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Prénom"
+                                        value={prenom}
+                                        onChange={(e) => setPrenom(e.target.value)}
+                                    />
+                                    <input
+                                        type="submit"
+                                        value="Rechercher"
+                                    />
+                                </form>
                             </div>
-                            {/* Div principale avec l'affichage des informations personelles */}
+                            {/* Affiche les résultats de la recherche */}
+                            <div>
+                                <p id="res-re" style={{display: 'none'}}>Résultat de la recherche : </p>
+                                <ul>
+                                    {/* On affiche les personnes que l'on a récupéré au 
+                                    chargement de la page dans le backend */}
+                                    {resultatR && resultatR.map(item => {
+                                        return (
+                                            <>
+                                                {/* Si on a pas la personne en ami, propose de l'ajouter */}
+                                                {item.id && 
+                                                <div key={item.id}>
+                                                    <form onSubmit={addFriend(item.id)}>
+                                                        <li key={item.id + 'li'}> 
+                                                            <p>Image des familles</p>
+                                                            <p key={item.nom}> {item.nom} {item.prenom}</p>
+                                                            <a key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                            <input id={item.id} key={item.id} type="submit" value="Ajouter"/>
+                                                            <p id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                        </li>
+                                                    </form>
+                                                </div>}
+                                                {/* Sinon affiche qu'elle est déjà notre ami */}
+                                                {item.idF && 
+                                                <div key={item.idF}>
+                                                    <li key={item.idF + 'li'}>
+                                                        <p>Image des familles</p>
+                                                        <p key={item.nomF}> {item.nomF} {item.prenomF}</p>
+                                                        <a key={item.idF + 'bb'} href={'/ProfilUtilisateur/'+item.idF}>Page de profil</a>
+                                                        <p id={item.idF + 'aa'}>Ami déjà ajouté</p> 
+                                                    </li>
+                                                </div>}
+                                            </>
+                                        )
+                                    })}
+                                </ul>
+                                {/* Sinon on affiche l'erreur */}
+                                {errorR && <p>{errorR}</p>}
+                            </div>
+                            {/* Div principale avec l'affichage des informations personelles
+                            (Au chargement de la page) */}
                             <div>
                                 <p>Suggestions d'ami :</p>
                                 <ul>
@@ -125,9 +218,13 @@ const Amis = () => {
                                         return (
                                             <div key={item.id}>
                                                 <form onSubmit={addFriend(item.id)}>
-                                                    <li key={item.nom}> {item.nom} {item.prenom}</li>
-                                                    <input id={item.id} key={item.id} type="submit" value="Ajouter"/>
-                                                    <p id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                    <li key={item.nom +'li'}> 
+                                                        <p>Image des familles</p>
+                                                        <p key={item.nom}> {item.nom} {item.prenom}</p>
+                                                        <a key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                        <input id={item.id} key={item.id} type="submit" value="Ajouter"/>
+                                                        <p id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                    </li>
                                                 </form>
                                             </div>
                                         )

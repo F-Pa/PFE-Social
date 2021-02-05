@@ -5,7 +5,7 @@ import axios from 'axios';
 // Style :
 import '../style/login.css';
 
-// TODO : BACKEND fini / STYLE A FAIRE
+// FINI
 
 const Signup = () => {
     /* ---------------------------------------------------------------------
@@ -83,13 +83,13 @@ const Signup = () => {
     return(
         <>
             {/* Si l'utilisateur s'est identifié redirige vers la page de profil */}
-            {redirection ? <Redirect to="/Test"/> : null}
+            {redirection ? <Redirect to="/Profil"/> : null}
             <div className="login-wrap">
                 <div className="login-html">
                     <h1 class="titre">S'inscrire</h1>
                     <p className="subtitle">Tirez le meilleur parti de votre vie Universitaire</p>
                     {/*  On gère le Signup */}
-                    <div className="login-form">
+                    <div className="login-form-si">
                         <div className="sign-in-htm">
                             <form onSubmit={handleSubmit}>
                                 <div className="group">
@@ -136,16 +136,16 @@ const Signup = () => {
                                         onChange={(e) => setPrenom(e.target.value)}
                                     />
                                 </div>
-                                <div class="group">
-                                    <label class="label">Question secrète</label>
-                                    <select class="select" required onChange={(e) => setQuest(e.target.value)}>
+                                <div className="group">
+                                    <label className="label">Question secrète</label>
+                                    <select className="select" required onChange={(e) => setQuest(e.target.value)}>
                                         <option value="" hidden>Questions</option>
                                         <option value='Surnom'>Quel était votre surnom enfant ?</option>
                                         <option value='City'>Dans quelle ville êtes-vous né(e) ?</option>
                                         <option value='Mat'>Quel est votre domaine d'étude préféré ?</option>
                                         <option value='Animal'>Quel est le nom de votre animal de compagnie ?</option>
                                     </select>
-                                    <input class="input"
+                                    <input className="input"
                                         required
                                         type='text'
                                         placeholder='Réponse'
@@ -153,20 +153,20 @@ const Signup = () => {
                                         onChange={(e) => setSecret(e.target.value)}
                                     />
                                 </div>
-                                <div class="group">
-                                    <input class="button"
+                                <div className="group">
+                                    <input className="button"
                                         required
                                         type='submit'
                                         value='Créer un compte'
                                     />
                                 </div>
-                                {errorS && <p>{errorS}</p>}
+                                {errorS && <p className="error-signin">{errorS}</p>}
                             </form>
                         </div>
                     </div>
                     {/* Redirection vers la page d'identification */}
-                    <div class="hr"></div>
-                    <div class="foot-lnk">
+                    <div className="hr"></div>
+                    <div className="foot-lnk">
                         <label className="subtitle" for="tab-1">Déjà inscrit(e) ? </label>
                         <Link className="link-signin" to="/Signin">
                             S'identifier
