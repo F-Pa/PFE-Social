@@ -33,7 +33,7 @@ router.post('/getPersonne', (req, res) => {
                 MATCH (p:Utilisateur)
                 WHERE NOT (p)-[:EST_AMI]-(u) AND NOT (p.Id = $userId)
                 RETURN p.Id as id, p.Nom as nom, p.Prenom as prenom
-                LIMIT 9`,
+                LIMIT 10`,
             {
                 userId: req.body.id
             }
@@ -70,13 +70,14 @@ Ajout et suppression d'amis
 
 
 // Ajoute une relation entre l'utilisateur et la personne selectionnée
+// Crée une discussion entre ces deux personnes
 router.post('/addFriend', (req, res) => {
     session.writeTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userIdu})
                 WITH u
                 MATCH (p:Utilisateur)
                 WHERE p.Id = $userIdp
-                CREATE (u)-[r:EST_AMI {Id:$userIdu}]->(p)-[a:EST_AMI {Id:$userIdp}]->(u)`,
+                CREATE (d:Discussion {Id1:$userIdu, Id2:$userIdp, Message:[]}), ((u)-[r:EST_AMI {Id:$userIdu}]->(p)-[a:EST_AMI {Id:$userIdp}]->(u)), ((u)-[b:DISCUTE]->(d)), ((p)-[c:DISCUTE]->(d)) `,
             {
                 userIdu: req.body.idUtilisateur,
                 userIdp: req.body.idPersonne
@@ -93,8 +94,8 @@ router.post('/removeFriend', (req, res) => {
     session.writeTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userIdu})
                 WITH u
-                MATCH (p:Utilisateur {Id:$userIdp})-[r:EST_AMI]->(u)-[a:EST_AMI]->(p)
-                DELETE r, a`,
+                MATCH (p:Utilisateur {Id:$userIdp})-[r:EST_AMI]->(u)-[a:EST_AMI]->(p), (d:Discussion {Id1:$userIdu, Id2:$userIdp})
+                DETACH DELETE r, a, d`,
             {
                 userIdu: req.body.idUtilisateur,
                 userIdp: req.body.idPersonne
@@ -174,7 +175,7 @@ router.post('/searchFriend', (req, res) => {
                     tcx.run(`MATCH (u:Utilisateur)
                             WHERE (u.Prenom = $prenom OR u.Nom = $nom) AND NOT (u.Id = $userIdu)
                             RETURN u.Id as id, u.Nom as nom, u.Prenom as prenom
-                            LIMIT 9`,
+                            LIMIT 10`,
                         {
                             userIdu: req.body.id,
                             nom: req.body.nom,
@@ -220,7 +221,7 @@ router.post('/searchFriend', (req, res) => {
                             MATCH (u:Utilisateur)
                             WHERE (u.Prenom = $prenom OR u.Nom = $nom) AND NOT (u.Id = $userIdu) AND NOT (u = p)
                             RETURN u.Id as id, u.Nom as nom, u.Prenom as prenom
-                            LIMIT 9`,
+                            LIMIT 10`,
                         {
                             userIdu: req.body.id,
                             userIdp: idF[0],
@@ -260,7 +261,7 @@ Vérifie si l'utilisateur est déjà ami avec la personne
 --------------------------------------------------------------------*/
 
 
-// Ajoute une relation entre l'utilisateur et la personne selectionnée
+// Vérifie si deux personnes données sont amis
 router.post('/isFriend', (req, res) => {
     session.readTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userIdu})-[:EST_AMI]-(p:Utilisateur {Id:$userIdp})

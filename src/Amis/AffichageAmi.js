@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
+import '../style/ami.css';
+import logo from './test.jpg';
 
 import NavBar from '../NavBar/NavBar'
 
@@ -11,7 +13,7 @@ dotenv.config();
 
 // TODO : Affichage des images utilisateur (idemAMIS)
 // BACKEND fini
-// TODO : STYLE A FAIRE
+// STYLE fini
 
 const AffichageAmi = () => {
     /* ---------------------------------------------------------------------
@@ -105,20 +107,20 @@ const AffichageAmi = () => {
                         {/* On affiche les amis de l'utilisateur */}
                         <div className="test">
                             <div>
-                                <p>Vos amis :</p>
+                                <h1>Vos amis :</h1>
                                 <ul>
                                     {/* Amis récupérés dans le backend au
                                     chargement de la page */}
                                     {resultat && resultat.map(item => {
                                         return (
-                                            <div key={item.id}>
+                                            <div className="ami" key={item.id}>
                                                 <form onSubmit={removeFriend(item.id)}>
-                                                    <li key={item.id + 'li'}>
-                                                        <p>Image des familles</p>
-                                                        <p key={item.nom}> {item.nom} {item.prenom}</p>
-                                                        <a key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
-                                                        <input id={item.id} key={item.id} type="submit" value="Supprimer"/>
-                                                        <p id={item.id + 'aa'} style={{display: 'none'}}>Ami supprimé</p>
+                                                    <li className="card" key={item.id + 'li'}>
+                                                        <img className="picture" src={logo} alt=""/>
+                                                        <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
+                                                        <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                        <input className="button" id={item.id} key={item.id} type="submit" value="Supprimer"/>
+                                                        <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami supprimé</p>
                                                     </li>
                                                 </form>
                                             </div>
@@ -127,9 +129,9 @@ const AffichageAmi = () => {
                                 </ul>
                             </div>
                             {/* Si ce dernier n'en a pas encore on le redirige vers la page de rencontre */}
-                            <div id='nofriend' style={{display: 'none'}}>
-                                <p>Vous n'avez pas encore d'ami</p>
-                                <Link to="/Rencontre">
+                            <div className="div-ami" id='nofriend' style={{display: 'none'}}>
+                                <p className="p-a">Vous n'avez pas encore d'ami</p>
+                                <Link className="link-ami" to="/Rencontre">
                                     N'hésitez pas à en ajouter
                                 </Link>
                             </div>

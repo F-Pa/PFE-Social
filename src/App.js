@@ -7,8 +7,9 @@ import Mdp from './Login/MdpForgot';
 import Test from './Test';
 import Profil from './Profil/Profil';
 import AffichageAmi from './Amis/AffichageAmi';
-import Amis from './Amis/Amis'
-import ProfilAmi from './ProfilAmi/ProfilAmi'
+import Amis from './Amis/Amis';
+import ProfilAmi from './ProfilAmi/ProfilAmi';
+import Chat from './Chat/Chat';
 import NavBar from './NavBar/NavBar';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/Rencontre" component={Amis}/>
         <Route path="/Navbar" component={NavBar}/>
         <Route path="/ProfilUtilisateur/:id" component={ProfilAmi}/>
+        <Route path="/Chat" component={Chat}/>
       </Switch>
     </div>
   </Router>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import '../style/ami.css';
+import logo from './test.jpg';
 
 import NavBar from '../NavBar/NavBar'
 
@@ -10,10 +12,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // TODO : Systeme de recommendation pour optimiser la recherche
-// TODO : système de notifications pour l'ajout des amis
+// TODO : système de notifications pour l'ajout des amis (si on a le temps)
+// TODO : Séparer les pages de recherche et de suggestions + fixer le recherche (n'affiche pas les amis déjà ajouté)
 // TODO : Affichage des images utilisateur (idem AffichageAmi)
 // BACKEND fini
-// TODO : STYLE A FAIRE
+// STYLE fini
 
 const Amis = () => {
     /* ---------------------------------------------------------------------
@@ -122,7 +125,9 @@ const Amis = () => {
             })
             if(resultatR) {
                 var c = document.getElementById('res-re');
+                var d = document.getElementById("sugg");
                 c.style.display = 'block';
+                d.style.display = 'none';
             }
         }
     }
@@ -145,24 +150,27 @@ const Amis = () => {
                         <div className="test">
                             {/* Permet la recherche d'une personne en particulier pour 
                             l'ajouter en ami (recherche par nom et/ou prénom) */}
-                            <div>
-                                <p>Rechercher une personne en particulier</p>
-                                <form onSubmit={searchFriend}>
-                                    <label>Nom</label>
+                            <div className="search-ami">
+                                <h2 className="h2-ami">Rechercher une personne en particulier</h2>
+                                <form className="search" onSubmit={searchFriend}>
+                                    <label className="search-name">Nom :</label>
                                     <input
+                                        className="champ-search"
                                         type="text"
                                         placeholder="Nom"
                                         value={nom}
                                         onChange={(e) => setNom(e.target.value)}
                                     />
-                                    <label>Prénom</label>
+                                    <label className="search-name">Prénom :</label>
                                     <input
+                                        className="champ-search"
                                         type="text"
                                         placeholder="Prénom"
                                         value={prenom}
                                         onChange={(e) => setPrenom(e.target.value)}
                                     />
                                     <input
+                                        className="button-ami"
                                         type="submit"
                                         value="Rechercher"
                                     />
@@ -170,7 +178,6 @@ const Amis = () => {
                             </div>
                             {/* Affiche les résultats de la recherche */}
                             <div>
-                                <p id="res-re" style={{display: 'none'}}>Résultat de la recherche : </p>
                                 <ul>
                                     {/* On affiche les personnes que l'on a récupéré au 
                                     chargement de la page dans le backend */}
@@ -179,25 +186,25 @@ const Amis = () => {
                                             <>
                                                 {/* Si on a pas la personne en ami, propose de l'ajouter */}
                                                 {item.id && 
-                                                <div key={item.id}>
+                                                <div className="ami" key={item.id}>
                                                     <form onSubmit={addFriend(item.id)}>
-                                                        <li key={item.id + 'li'}> 
-                                                            <p>Image des familles</p>
-                                                            <p key={item.nom}> {item.nom} {item.prenom}</p>
-                                                            <a key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
-                                                            <input id={item.id} key={item.id} type="submit" value="Ajouter"/>
-                                                            <p id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                        <li className="card" key={item.id + 'li'}> 
+                                                            <img className="picture" src={logo} alt=""/>
+                                                            <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
+                                                            <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                            <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>
+                                                            <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
                                                         </li>
                                                     </form>
                                                 </div>}
                                                 {/* Sinon affiche qu'elle est déjà notre ami */}
                                                 {item.idF && 
-                                                <div key={item.idF}>
-                                                    <li key={item.idF + 'li'}>
-                                                        <p>Image des familles</p>
-                                                        <p key={item.nomF}> {item.nomF} {item.prenomF}</p>
-                                                        <a key={item.idF + 'bb'} href={'/ProfilUtilisateur/'+item.idF}>Page de profil</a>
-                                                        <p id={item.idF + 'aa'}>Ami déjà ajouté</p> 
+                                                <div className="ami" key={item.idF}>
+                                                    <li className="card" key={item.idF + 'li'}>
+                                                        <img className="picture" src={logo} alt=""/>
+                                                        <p className="name" key={item.nomF}>{item.prenomF} {item.nomF}</p>
+                                                        <a className="a-ami" key={item.idF + 'bb'} href={'/ProfilUtilisateur/'+item.idF}>Page de profil</a>
+                                                        <p className="p-ami" id={item.idF + 'aa'}>Ami déjà ajouté</p> 
                                                     </li>
                                                 </div>}
                                             </>
@@ -209,21 +216,21 @@ const Amis = () => {
                             </div>
                             {/* Div principale avec l'affichage des informations personelles
                             (Au chargement de la page) */}
-                            <div>
-                                <p>Suggestions d'ami :</p>
+                            <div id="sugg">
+                                <h2 className="h2-ami">Suggestions d'ami :</h2>
                                 <ul>
                                     {/* On affiche les personnes que l'on a récupéré au 
                                     chargement de la page dans le backend */}
                                     {resultat && resultat.map(item => {
                                         return (
-                                            <div key={item.id}>
+                                            <div className="ami" key={item.id}>
                                                 <form onSubmit={addFriend(item.id)}>
-                                                    <li key={item.nom +'li'}> 
-                                                        <p>Image des familles</p>
-                                                        <p key={item.nom}> {item.nom} {item.prenom}</p>
-                                                        <a key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
-                                                        <input id={item.id} key={item.id} type="submit" value="Ajouter"/>
-                                                        <p id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                    <li className="card" key={item.nom +'li'}> 
+                                                        <img className="picture" src={logo} alt=""/>
+                                                        <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
+                                                        <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                        <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>
+                                                        <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
                                                     </li>
                                                 </form>
                                             </div>
@@ -234,9 +241,9 @@ const Amis = () => {
                                 </ul>
                                 {/* Erreur si la recherche dans le back n'a rien fourni*/}
                                 {errorM && <p>{errorM}</p>}
-                                {/* Refresh la page */}
-                                <a href="/Rencontre">D'autres Suggestions</a>
                             </div>
+                            {/* Refresh la page */}
+                            <a className="link-ami" href="/Rencontre">D'autres Suggestions</a>
                         </div>
                     </div>
                 </>
