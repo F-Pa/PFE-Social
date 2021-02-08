@@ -156,9 +156,6 @@ const Chat = () => {
                                                     <button key={item.id + 'bu'} onClick={handleClick(item.id)} className="button_list">
                                                         <div key={item.id + 'tr'} className="chat_list">
                                                             <div key={item.id + 're'} className="chat_people">
-                                                                <div key={item.id + 'po'} className="chat_img"> 
-                                                                    <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"/>
-                                                                </div>
                                                                 <div key={item.id+'tr'} className="chat_ib">
                                                                     <h5 key={item.id + 'hh'}>{item.prenom} {item.nom}</h5>
                                                                     <p key={item.id + 'pp'}>Continuez votre discussion</p>
@@ -194,9 +191,6 @@ const Chat = () => {
                                                 else {
                                                     return (
                                                         <div key={item.dt + 'qs'} className="incoming_msg">
-                                                            <div key={item.dt + 'gf'} className="incoming_msg_img"> 
-                                                                <img key={item.dt + 'ws'} src="https://ptetutorials.com/images/user-profile.png" alt="sunil"/>
-                                                            </div>
                                                             <div key={item.dt + 'xc'} className="received_msg">
                                                                 <div key={item.dt + 'vb'} className="received_withd_msg">
                                                                     <p key={item.dt + 'pp'}>{item.message}</p>

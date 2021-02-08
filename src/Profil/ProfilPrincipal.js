@@ -14,6 +14,11 @@ const ProfilPrincipal = () => {
     Variables
     ----------------------------------------------------------------------*/
 
+    // Récupère l'image que l'utilisateur veut upload
+    const [image, setImage] = useState();
+    
+    // Récupère l'image de l'utilisateur dans la bdd
+    const [imagebd, setImagebd] = useState();
 
     // Récupère les valeurs dans la base de données pour le profil principal
     const [villebd, setVillebd] = useState('');
@@ -52,6 +57,7 @@ const ProfilPrincipal = () => {
     // Au chargement de la page on affiche les informations contenues dans la bdd
     useEffect(() => {
         getBdd();
+        getImage();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -133,6 +139,52 @@ const ProfilPrincipal = () => {
     }
 
 
+    // Permet l'upload de l'image sélectionnée par l'utilisateur
+    function handleImage(e) {
+        e.preventDefault();
+        console.log(image);
+        const data = new FormData();
+        data.append('id', decoded.userId);
+        data.append('file', image);
+        axios.post('http://localhost:4000/app/mongo/storeImg', data)
+        .then(res => {
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    // Récupère l'image de l'utilisateur au chargement de la page
+    function getImage() {
+        const user_info3 = {
+            id: decoded.userId
+        }
+        axios.post('http://localhost:4000/app/mongo/getImg', user_info3)
+        .then(res => {
+            setImagebd(res.data.items);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    function handleClick(e) {
+        e.preventDefault();
+        var a = document.getElementById('image');
+        var b = document.getElementById('img');
+        a.style.display = 'block';
+        b.style.display = 'none';
+    }
+
+    function arrayBufferToBase64(buffer) {
+        var binary = '';
+        var bytes = [].slice.call(new Uint8Array(buffer));        
+        bytes.forEach((b) => binary += String.fromCharCode(b));        
+        return window.btoa(binary);
+    };
+
+
     /* ---------------------------------------------------------------------
     HTML
     ----------------------------------------------------------------------*/
@@ -145,7 +197,23 @@ const ProfilPrincipal = () => {
                     {/* Div centrale avec les informations à modifier */}
                     <div>
                         <div>
-                            <p>Image des familles</p>
+                            {imagebd && imagebd.map(image => {
+                                var src = 'data:'+image.img.contentType+";base64,"+arrayBufferToBase64(image.img.data.data);
+                                return (
+                                    <img key={src} src={src} alt="profile"/>
+                                )
+                            })}
+                            <div id="img">
+                                <form onSubmit={handleClick}>
+                                    <input type="submit" value="Modifier l'image"/>
+                                </form>
+                            </div>
+                            <div id="image" style={{display: 'none'}}>
+                                <form onSubmit={handleImage}>
+                                    <input type="file" onChange={(e) => setImage(e.target.files[0])}/>
+                                    <input type="submit" value="Enregistrer"/>
+                                </form>
+                            </div>
                         </div>
                         {/* Affichage normal des informations */}
                         <div id='data'>

@@ -106,7 +106,7 @@ const AffichageAmi = () => {
                         </div>
                         {/* On affiche les amis de l'utilisateur */}
                         <div className="test">
-                            <div>
+                            <div className="scor">
                                 <h1>Vos amis :</h1>
                                 <ul>
                                     {/* Amis récupérés dans le backend au

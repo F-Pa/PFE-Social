@@ -13,7 +13,7 @@ dotenv.config();
 
 // TODO : Systeme de recommendation pour optimiser la recherche
 // TODO : système de notifications pour l'ajout des amis (si on a le temps)
-// TODO : Séparer les pages de recherche et de suggestions + fixer le recherche (n'affiche pas les amis déjà ajouté)
+// TODO : Fixer le recherche (n'affiche pas les amis déjà ajouté)
 // TODO : Affichage des images utilisateur (idem AffichageAmi)
 // BACKEND fini
 // STYLE fini
@@ -123,12 +123,6 @@ const Amis = () => {
                 console.log('popo');
                 setErrorR(error.response.data.message);
             })
-            if(resultatR) {
-                var c = document.getElementById('res-re');
-                var d = document.getElementById("sugg");
-                c.style.display = 'block';
-                d.style.display = 'none';
-            }
         }
     }
 
@@ -148,47 +142,75 @@ const Amis = () => {
                             <NavBar/>
                         </div>
                         <div className="test">
-                            {/* Permet la recherche d'une personne en particulier pour 
-                            l'ajouter en ami (recherche par nom et/ou prénom) */}
-                            <div className="search-ami">
-                                <h2 className="h2-ami">Rechercher une personne en particulier</h2>
-                                <form className="search" onSubmit={searchFriend}>
-                                    <label className="search-name">Nom :</label>
-                                    <input
-                                        className="champ-search"
-                                        type="text"
-                                        placeholder="Nom"
-                                        value={nom}
-                                        onChange={(e) => setNom(e.target.value)}
-                                    />
-                                    <label className="search-name">Prénom :</label>
-                                    <input
-                                        className="champ-search"
-                                        type="text"
-                                        placeholder="Prénom"
-                                        value={prenom}
-                                        onChange={(e) => setPrenom(e.target.value)}
-                                    />
-                                    <input
-                                        className="button-ami"
-                                        type="submit"
-                                        value="Rechercher"
-                                    />
-                                </form>
-                            </div>
-                            {/* Affiche les résultats de la recherche */}
-                            <div>
-                                <ul>
-                                    {/* On affiche les personnes que l'on a récupéré au 
-                                    chargement de la page dans le backend */}
-                                    {resultatR && resultatR.map(item => {
-                                        return (
-                                            <>
-                                                {/* Si on a pas la personne en ami, propose de l'ajouter */}
-                                                {item.id && 
+                            <div className="scor">
+                                {/* Permet la recherche d'une personne en particulier pour 
+                                l'ajouter en ami (recherche par nom et/ou prénom) */}
+                                <div className="search-ami">
+                                    <h2 className="h2-ami">Rechercher une personne en particulier</h2>
+                                    <form className="search" onSubmit={searchFriend}>
+                                        <label className="search-name">Nom :</label>
+                                        <input
+                                            className="champ-search"
+                                            type="text"
+                                            placeholder="Nom"
+                                            value={nom}
+                                            onChange={(e) => setNom(e.target.value)}
+                                        />
+                                        <label className="search-name">Prénom :</label>
+                                        <input
+                                            className="champ-search"
+                                            type="text"
+                                            placeholder="Prénom"
+                                            value={prenom}
+                                            onChange={(e) => setPrenom(e.target.value)}
+                                        />
+                                        <input
+                                            className="button-ami"
+                                            type="submit"
+                                            value="Rechercher"
+                                        />
+                                    </form>
+                                </div>
+                                {/* Affiche les résultats de la recherche */}
+                                <div>
+                                    <ul>
+                                        {/* On affiche les personnes que l'on a récupéré au 
+                                        chargement de la page dans le backend */}
+                                        {resultatR && resultatR.map(item => {
+                                            return (
+                                                <>
+                                                    {/* Si on a pas la personne en ami, propose de l'ajouter */}
+                                                    {item.id && 
+                                                    <div className="ami" key={item.id}>
+                                                        <form onSubmit={addFriend(item.id)}>
+                                                            <li className="card" key={item.id + 'li'}>
+                                                                <img className="picture" src={logo} alt=""/>
+                                                                <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
+                                                                <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                                <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>
+                                                                <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                            </li>
+                                                        </form>
+                                                    </div>}
+                                                </>
+                                            )
+                                        })}
+                                    </ul>
+                                    {/* Sinon on affiche l'erreur */}
+                                    {errorR && <p>{errorR}</p>}
+                                </div>
+                                {/* Div principale avec l'affichage des informations personelles
+                                (Au chargement de la page) */}
+                                <div id="sugg">
+                                    <h2 className="h2-ami">Suggestions d'ami :</h2>
+                                    <ul>
+                                        {/* On affiche les personnes que l'on a récupéré au 
+                                        chargement de la page dans le backend */}
+                                        {resultat && resultat.map(item => {
+                                            return (
                                                 <div className="ami" key={item.id}>
                                                     <form onSubmit={addFriend(item.id)}>
-                                                        <li className="card" key={item.id + 'li'}> 
+                                                        <li className="card" key={item.nom +'li'}> 
                                                             <img className="picture" src={logo} alt=""/>
                                                             <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
                                                             <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
@@ -196,54 +218,18 @@ const Amis = () => {
                                                             <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
                                                         </li>
                                                     </form>
-                                                </div>}
-                                                {/* Sinon affiche qu'elle est déjà notre ami */}
-                                                {item.idF && 
-                                                <div className="ami" key={item.idF}>
-                                                    <li className="card" key={item.idF + 'li'}>
-                                                        <img className="picture" src={logo} alt=""/>
-                                                        <p className="name" key={item.nomF}>{item.prenomF} {item.nomF}</p>
-                                                        <a className="a-ami" key={item.idF + 'bb'} href={'/ProfilUtilisateur/'+item.idF}>Page de profil</a>
-                                                        <p className="p-ami" id={item.idF + 'aa'}>Ami déjà ajouté</p> 
-                                                    </li>
-                                                </div>}
-                                            </>
-                                        )
-                                    })}
-                                </ul>
-                                {/* Sinon on affiche l'erreur */}
-                                {errorR && <p>{errorR}</p>}
+                                                </div>
+                                            )
+                                        })}
+                                        {/* Sinon on affiche le chargement */}
+                                        {!resultat && !errorM && <p>chargement ...</p>}
+                                    </ul>
+                                    {/* Erreur si la recherche dans le back n'a rien fourni*/}
+                                    {errorM && <p>{errorM}</p>}
+                                </div>
+                                {/* Refresh la page */}
+                                <a className="link-ami" href="/Rencontre">D'autres Suggestions</a>
                             </div>
-                            {/* Div principale avec l'affichage des informations personelles
-                            (Au chargement de la page) */}
-                            <div id="sugg">
-                                <h2 className="h2-ami">Suggestions d'ami :</h2>
-                                <ul>
-                                    {/* On affiche les personnes que l'on a récupéré au 
-                                    chargement de la page dans le backend */}
-                                    {resultat && resultat.map(item => {
-                                        return (
-                                            <div className="ami" key={item.id}>
-                                                <form onSubmit={addFriend(item.id)}>
-                                                    <li className="card" key={item.nom +'li'}> 
-                                                        <img className="picture" src={logo} alt=""/>
-                                                        <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
-                                                        <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
-                                                        <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>
-                                                        <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
-                                                    </li>
-                                                </form>
-                                            </div>
-                                        )
-                                    })}
-                                    {/* Sinon on affiche le chargement */}
-                                    {!resultat && !errorM && <p>chargement ...</p>}
-                                </ul>
-                                {/* Erreur si la recherche dans le back n'a rien fourni*/}
-                                {errorM && <p>{errorM}</p>}
-                            </div>
-                            {/* Refresh la page */}
-                            <a className="link-ami" href="/Rencontre">D'autres Suggestions</a>
                         </div>
                     </div>
                 </>
