@@ -12,6 +12,7 @@ import ProfilAmi from './ProfilAmi/ProfilAmi';
 import Chat from './Chat/Chat';
 import NavBar from './NavBar/NavBar';
 import Publication from './Publication/Publication'
+import PrintPdf from './Profil/PrintPdf'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/ProfilUtilisateur/:id" component={ProfilAmi}/>
         <Route path="/Chat" component={Chat}/>
         <Route path="/Publication" component={Publication}/>
+        <Route path="/PrintPdf" component={PrintPdf}/>
       </Switch>
     </div>
   </Router>

@@ -11,6 +11,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const ProfilAmi = (props) => {
+    console.log(props);
     // Récupère les informations du Token
     let decoded;
     const token = sessionStorage.getItem('token');
@@ -39,7 +40,7 @@ const ProfilAmi = (props) => {
                     </div>
                     {/* Div permettant à l'utilisateur d'upload ses cours */}
                     <div>
-                        <ProfilCoursAmi/>
+                        <ProfilCoursAmi props={props}/>
                     </div>
                 </div>
             </div>

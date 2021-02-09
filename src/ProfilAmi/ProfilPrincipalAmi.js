@@ -10,10 +10,13 @@ dotenv.config();
 
 
 const ProfilPrincipalAmi = (urlid) => {
+    console.log(urlid);
     /* ---------------------------------------------------------------------
     Variables
     ----------------------------------------------------------------------*/
 
+    // Récupère l'image de l'utilisateur dans la bdd
+    const [imagebd, setImagebd] = useState();
 
     // Récupère les valeurs dans la base de données pour le profil principal
     const [villebd, setVillebd] = useState('');
@@ -47,6 +50,7 @@ const ProfilPrincipalAmi = (urlid) => {
     useEffect(() => {
         getBdd();
         getName();
+        getImage();
         isFriend();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -151,6 +155,28 @@ const ProfilPrincipalAmi = (urlid) => {
         }
     }
 
+    // Récupère l'image de l'utilisateur au chargement de la page
+    function getImage() {
+        const user_info3 = {
+            id: urlid.props.match.params.id
+        }
+        axios.post('http://localhost:4000/app/mongo/getImg', user_info3)
+        .then(res => {
+            setImagebd(res.data.items);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    function arrayBufferToBase64(buffer) {
+        var binary = '';
+        var bytes = [].slice.call(new Uint8Array(buffer));        
+        bytes.forEach((b) => binary += String.fromCharCode(b));        
+        return window.btoa(binary);
+    };
+    
+
 
     /* ---------------------------------------------------------------------
     HTML
@@ -164,11 +190,16 @@ const ProfilPrincipalAmi = (urlid) => {
                     {/* Div centrale avec les informations à modifier */}
                     <div>
                         <div>
-                            <p>Image des familles</p>
+                            {imagebd && imagebd.map(image => {
+                                var src = 'data:'+image.img.contentType+";base64,"+arrayBufferToBase64(image.img.data.data);
+                                return (
+                                    <img key={src} src={src} alt="profile"/>
+                                )
+                            })}
                         </div>
                         {/* Affichage normal des informations */}
                         <div id='data'>
-                            <h1>Profil de : {prenombd} {nombd}</h1>
+                            <h1>Profil de {prenombd} {nombd}</h1>
                             <p>Ville : {villebd}</p>
                             <p>Ecole : {ecolebd}</p>
                             <p>Filière : {filierebd}</p>

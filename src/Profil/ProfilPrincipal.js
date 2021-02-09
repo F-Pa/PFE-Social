@@ -142,17 +142,18 @@ const ProfilPrincipal = () => {
     // Permet l'upload de l'image sélectionnée par l'utilisateur
     function handleImage(e) {
         e.preventDefault();
-        console.log(image);
-        const data = new FormData();
-        data.append('id', decoded.userId);
-        data.append('file', image);
-        axios.post('http://localhost:4000/app/mongo/storeImg', data)
-        .then(res => {
-            window.location.reload();
-        })
-        .catch(error => {
-            console.log(error);
-        })
+        if(decoded) {
+            const data = new FormData();
+            data.append('id', decoded.userId);
+            data.append('file', image);
+            axios.post('http://localhost:4000/app/mongo/storeImg', data)
+            .then(res => {
+                window.location.reload();
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        }
     }
 
     // Récupère l'image de l'utilisateur au chargement de la page
@@ -162,7 +163,6 @@ const ProfilPrincipal = () => {
         }
         axios.post('http://localhost:4000/app/mongo/getImg', user_info3)
         .then(res => {
-            console.log(res.data.items[0].img);
             setImagebd(res.data.items);
         })
         .catch(error => {

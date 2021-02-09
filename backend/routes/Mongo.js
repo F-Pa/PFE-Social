@@ -12,6 +12,7 @@ const router = express.Router();
 dotenv.config();
 
 const Image = require('../Models/Image');
+const Pdf = require('../Models/Pdf');
 
 mongoose.connect(process.env.DATABASE_ACCESS, { useNewUrlParser: true, useUnifiedTopology: true })
  
@@ -94,5 +95,55 @@ router.post('/getImg', (req, res) => {
         }
     })
 })
+
+
+/*----------------------------------------------------------------------
+Upload le pdf de l'utilisateur 
+----------------------------------------------------------------------*/
+
+
+router.post('/storePdf', upload.single('file'), (req, res, next) => {
+    var obj = {
+        id: req.body.id,
+        titre: req.body.titre,
+        pdf: {
+            data: fs.readFileSync(path.join(process.env.PATTH + req.file.filename)),
+            contentType: 'application/pdf'
+        }
+    };
+    Pdf.create(obj, (err, item) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.status(200).json({message: 'Image ajoutée'});
+        }
+    });
+})
+
+
+/*----------------------------------------------------------------------
+Récupère les pdfs de l'utilisateur si ils existent
+----------------------------------------------------------------------*/
+
+
+router.post('/getPdf', (req, res) => {
+    Pdf.exists({id: req.body.id}, function(err, user) {
+        if(err) console.log(err);
+        if(user) {
+            Pdf.find({id: req.body.id}, function(err, items) {
+                if(err) console.log(err);
+                else {
+                    res.status(200).json({items: items});
+                }
+            })
+        }
+        else {
+            return res.status(404).json({error: true, message: 'Vous n\'avez pas encore de cours'})
+        }
+    })
+})
+
+
 
 module.exports = router
