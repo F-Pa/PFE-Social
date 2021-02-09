@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import '../style/ami.css';
-import logo from './test.jpg';
 
 import NavBar from '../NavBar/NavBar'
+import Amiimage from './Amiimage'
 
 // Permet de décoder le token dans la sessionStorage
 const jwt = require('jsonwebtoken');
@@ -13,8 +13,6 @@ dotenv.config();
 
 // TODO : Systeme de recommendation pour optimiser la recherche
 // TODO : système de notifications pour l'ajout des amis (si on a le temps)
-// TODO : Fixer le recherche (n'affiche pas les amis déjà ajouté)
-// TODO : Affichage des images utilisateur (idem AffichageAmi)
 // BACKEND fini
 // STYLE fini
 
@@ -184,7 +182,7 @@ const Amis = () => {
                                                     <div className="ami" key={item.id}>
                                                         <form onSubmit={addFriend(item.id)}>
                                                             <li className="card" key={item.id + 'li'}>
-                                                                <img className="picture" src={logo} alt=""/>
+                                                                <Amiimage data={item.id}/>
                                                                 <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
                                                                 <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
                                                                 <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>
@@ -211,7 +209,7 @@ const Amis = () => {
                                                 <div className="ami" key={item.id}>
                                                     <form onSubmit={addFriend(item.id)}>
                                                         <li className="card" key={item.nom +'li'}> 
-                                                            <img className="picture" src={logo} alt=""/>
+                                                            <Amiimage data={item.id}/>
                                                             <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
                                                             <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
                                                             <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>

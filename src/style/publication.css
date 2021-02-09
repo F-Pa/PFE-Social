@@ -1,0 +1,149 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+#page {
+  margin: 0;
+  padding: 0;
+  max-width: 441px;
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: 50px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.tweet-container {
+  box-sizing: border-box;
+}
+.user {
+  width: 100%;
+  margin-top: 53px;
+  box-sizing: border-box;
+}
+#tweet .user img {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 58px;
+  margin: 0px;
+  margin-right: 5px;
+  box-sizing: border-box;
+  float: left;
+  clear: both;
+}
+.username {
+  padding: 8px;
+  box-sizing: border-box;
+  max-width: 90%;
+  float: left;
+}
+.user .name {
+  font-size: 15px;
+  font-weight: 700;
+  color: black;
+  margin-bottom: 3px;
+}
+
+
+.tweet-content {
+  width: 100%;
+  display: flex;
+  color: black;
+  font-size: 23px;
+  margin-bottom: 20px;
+  line-height: 28px;
+}
+
+.media {
+  width: 100%;
+  height: 233px;
+  object-fit: cover;
+}
+.date {
+  color: #8a9ba8;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.pt {
+  padding-top: 13px;
+}
+.pb {
+  padding-bottom: 13px;
+}
+.pr {
+  padding-right: 13px;
+}
+.sl {
+  padding-left: 10px;
+}
+.pl {
+  padding-left: 13px;
+}
+
+.pub {
+  background: #f8f8f8 none repeat scroll 0 0;
+  float: left;
+  padding-left: 20px;
+  overflow: auto;
+  height: 100%;
+  width: 30%; border-right:1px solid #c4c4c4;
+}
+
+.pub-test {
+  position: relative;
+  overflow: auto;
+  float: right;
+  width: 70%;
+  height: 100vh;
+}
+
+.yyui {
+  margin-left: 20%;
+  height: 100vh;
+}
+
+.button-pub {
+  margin-top: 40px;
+  margin-left: 30%;
+  border: none;
+  border-radius: 5px;
+  outline: 0;
+  display: block;
+  padding: 8px;
+  color: white;
+  background-color:rgba(40,57,101,.9);
+  text-align: center;
+  cursor: pointer;
+  width: 40%;
+  font-size: 18px;
+  font-family:"Tahoma";
+}
+
+.h2-pub {
+  text-align: center;
+}
+
+.input-pub {
+  resize: none;
+  width: 95%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 5%;
+  margin-bottom: 10px;
+  height: 100px;
+}
+
+.browse {
+  margin-top: 40px;
+  margin-left: 10%;
+  display: block;
+}
+
+.h1-pub {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  padding-top: 4%;
+}

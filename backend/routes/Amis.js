@@ -27,7 +27,8 @@ Et étant recommandé
 // Récupère les personnes dans la bdd (limité à 9)
 // Elles correspondent au système de recommendation TODO
 router.post('/getPersonne', (req, res) => {
-    session.readTransaction((tcx) => 
+    const session3 = driver.session();
+    session3.readTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userId})
                 WITH u
                 MATCH (p:Utilisateur)
@@ -91,17 +92,34 @@ router.post('/addFriend', (req, res) => {
 })
 
 router.post('/removeFriend', (req, res) => {
+    const session4 = driver.session();
+    console.log(req.body);
     session.writeTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userIdu})
                 WITH u
-                MATCH (p:Utilisateur {Id:$userIdp})-[r:EST_AMI]->(u)-[a:EST_AMI]->(p), (d:Discussion {Id1:$userIdu, Id2:$userIdp})
-                DETACH DELETE r, a, d`,
+                MATCH (p:Utilisateur {Id:$userIdp})-[r:EST_AMI]->(u)-[a:EST_AMI]->(p)
+                DETACH DELETE r, a`,
             {
                 userIdu: req.body.idUtilisateur,
                 userIdp: req.body.idPersonne
             }
         )
         .catch(error => {
+            console.log(error);
+            throw error;
+        })
+    )
+    session4.writeTransaction((tcx) => 
+        tcx.run(`MATCH (d:Discussion)
+                WHERE (d.Id1 = $userIdu AND d.Id2 = $userIdp) OR (d.Id1 = $userIdp AND d.Id2 = $userIdu)
+                DETACH DELETE d`,
+            {
+                userIdu: req.body.idUtilisateur,
+                userIdp: req.body.idPersonne
+            }    
+        )
+        .catch(error => {
+            console.log(error);
             throw error;
         })
     )

@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../style/ami.css';
-import logo from './test.jpg';
 
 import NavBar from '../NavBar/NavBar'
+import Amiimage from './Amiimage'
 
 // Permet de décoder le token dans la sessionStorage
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// TODO : Affichage des images utilisateur (idemAMIS)
-// BACKEND fini
-// STYLE fini
+// Fini
 
 const AffichageAmi = () => {
     /* ---------------------------------------------------------------------
@@ -48,6 +46,7 @@ const AffichageAmi = () => {
         getFriend();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     
     // Permet de récupérer les amis de l'utilisateur dans la bdd
@@ -116,7 +115,7 @@ const AffichageAmi = () => {
                                             <div className="ami" key={item.id}>
                                                 <form onSubmit={removeFriend(item.id)}>
                                                     <li className="card" key={item.id + 'li'}>
-                                                        <img className="picture" src={logo} alt=""/>
+                                                        <Amiimage data={item.id}/>
                                                         <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
                                                         <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
                                                         <input className="button" id={item.id} key={item.id} type="submit" value="Supprimer"/>

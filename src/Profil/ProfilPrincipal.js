@@ -162,6 +162,7 @@ const ProfilPrincipal = () => {
         }
         axios.post('http://localhost:4000/app/mongo/getImg', user_info3)
         .then(res => {
+            console.log(res.data.items[0].img);
             setImagebd(res.data.items);
         })
         .catch(error => {

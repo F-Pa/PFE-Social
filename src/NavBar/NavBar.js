@@ -91,7 +91,7 @@ const NavBar = () => {
                             </div>
                             <hr className="hr-nav"></hr>
                             {/* Les liens vers les autres pages */}
-                            <Link to="/">
+                            <Link to="/Publication">
                                 <div className="lien">
                                     <p className="text-nav">
                                         Page d'accueil
@@ -123,13 +123,6 @@ const NavBar = () => {
                                 <div className="lien">
                                     <p className="text-nav">
                                         Ma messagerie
-                                    </p>
-                                </div>
-                            </Link>
-                            <Link to="/">
-                                <div className="lien">
-                                    <p className="text-nav">
-                                        Etc ...
                                     </p>
                                 </div>
                             </Link>

@@ -114,6 +114,7 @@ function findProfile(id) {
 
 // Crée le profil
 function createProfil(id, ville, ecole, filiere, site, matiere) {
+    const session3 = driver.session();
     session.writeTransaction((tcx) =>
         tcx.run(`CREATE (p:Profil {Id:$userId, Ville:$userVille, Ecole:$userEcole, 
                 Filiere:$userFiliere, Site:$userSite, Matiere:$userMatiere})`,
@@ -130,24 +131,20 @@ function createProfil(id, ville, ecole, filiere, site, matiere) {
             throw error;
         })
     )
-}
-
-// crée la relation entre l'utilisateur et le profil
-function createRelationProfil(id) {
-    session2.writeTransaction((tcx) => 
-        tcx.run(`MATCH (u:Utilisateur)
-                WITH u
-                MATCH (p:Profil)
-                WHERE u.Id = p.Id = $userId
-                CREATE (u)-[r:A_POUR_PROFIL {Id:$userId}]->(p)`,
-            {
-                userId: id
-            }
-        )
-        .catch(error => {
-            throw error;
-        })
+    session3.writeTransaction((tcx) => 
+    tcx.run(`MATCH (u:Utilisateur)
+            WITH u
+            MATCH (p:Profil)
+            WHERE u.Id = p.Id = $userId
+            CREATE (u)-[r:A_POUR_PROFIL {Id:$userId}]->(p)`,
+        {
+            userId: id
+        }
     )
+    .catch(error => {
+        throw error;
+    })
+)
 }
 
 
@@ -206,7 +203,6 @@ router.post('/createProfil', (req, res) => {
         // Si ce n'est pas le cas on crée le profil
         if(_.isEmpty(utils)) {
             createProfil(id, ville, ecole, filiere, site, matiere);
-            createRelationProfil(id);
             return res.status(200).json({message: 'ok'})
         }
         // Sinon on modifie l'utilisateur

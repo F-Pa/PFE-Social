@@ -11,6 +11,7 @@ import Amis from './Amis/Amis';
 import ProfilAmi from './ProfilAmi/ProfilAmi';
 import Chat from './Chat/Chat';
 import NavBar from './NavBar/NavBar';
+import Publication from './Publication/Publication'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/Navbar" component={NavBar}/>
         <Route path="/ProfilUtilisateur/:id" component={ProfilAmi}/>
         <Route path="/Chat" component={Chat}/>
+        <Route path="/Publication" component={Publication}/>
       </Switch>
     </div>
   </Router>

@@ -6,6 +6,7 @@ const routeProfil = require('./routes/Profil');
 const routeAmis = require('./routes/Amis');
 const routeMongo = require('./routes/Mongo');
 const routeChat = require('./routes/Chat');
+const routePub = require('./routes/Publication');
 
 const app = express();
 
@@ -16,4 +17,5 @@ app.use('/app/profil', routeProfil);
 app.use('/app/amis', routeAmis);
 app.use('/app/mongo', routeMongo);
 app.use('/app/chat', routeChat);
+app.use('/app/pub', routePub);
 app.listen(4000, () => console.log("Le serveur est ok"));
