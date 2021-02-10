@@ -33,12 +33,11 @@ const Profil = () => {
                     <NavBar/>
                 </div>
                 {/* Div principale avec l'affichage des informations personelles */}
-                <div className="test">
-                    <ProfilPrincipal/>
-                </div>
-                {/* Div permettant à l'utilisateur d'upload ses cours */}
-                <div className="test">
-                    <ProfilCours/>
+                <div className="test-profil">
+                    <div className="scor-profil">
+                        <ProfilPrincipal/>
+                        <ProfilCours/>
+                    </div>
                 </div>
             </div>
         </>

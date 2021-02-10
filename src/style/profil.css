@@ -1,0 +1,239 @@
+/*body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #333333;
+    background-color: #ffffff; 
+}*/
+
+.infos-box-profil{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin:auto;
+    padding: 5%;
+    word-wrap: break-word;    
+    background-clip: border-box;
+}
+
+.h1-profil{
+    position: relative;
+    float: left;
+    margin-left: 20%;
+    margin-top: 4%;
+    color: inherit;
+}
+
+
+.info-profil{
+    position: relative;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    display: block;
+    padding: 15px 15px;
+    margin-top: -1px;
+    margin-bottom: -1px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+
+}
+
+.form-profil{
+    width: 50%;
+    margin: auto;
+}
+
+.bouton-profil{
+    margin-top:20px;
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color:rgba(40,57,101,.9);
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    font-family:"Tahoma";
+}
+
+.h2-profil{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.label-profil{
+    display: inline-block;
+    margin: 10px;
+    font-weight: bold;
+    padding: .2em .6em .3em;
+    font-size: 100%;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.bouton-spec-profil{
+    margin-top:20px;
+    border: none;
+    outline: 0;
+    display: inline;
+    padding: 8px;
+    color: white;
+    background-color:rgba(40,57,101,.9);
+    text-align: center;
+    cursor: pointer;
+    width: 55%;
+    font-size: 18px;
+    font-family:"Tahoma";
+}
+
+
+.tt-profil {
+    display: inline;
+}
+
+.img-spec-profil{
+    margin-left: 48%;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.champ-profil{
+    width: 100%;
+    border-radius: .25rem;
+    padding: .75rem 1rem;
+    border: none;
+}
+
+.img-profil{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.test-profil {
+    position: relative;
+    float: right;
+    width: 80%;
+    height: 100%;
+}
+
+.scor-profil {
+    /* background: #f8f8f8 none repeat scroll 0 0; */
+    /* float: left; */
+    padding: 20px;
+    overflow: auto;
+    max-height: 100vh;
+    height: 100%;
+}
+
+.image-profil {
+    margin-right: 10%;
+    position: relative;
+    float: right;
+}
+
+.tr-profil {
+    width: 100%;
+}
+
+.i-profil {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.a-pr {
+    color: lightblue;
+    text-decoration: underline;
+}
+
+.info-box-profil{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin:auto;
+    padding: 5%;
+    padding-top: 0;
+    word-wrap: break-word;    
+    background-clip: border-box;
+}
+
+.cours-profil{
+    margin-left: 3%;
+    width: 20%;
+}
+
+.champ-c-profil{
+    width: 100%;
+    border-radius: .25rem;
+    padding: .75rem 1rem;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    border: none;
+}
+
+.pdf-di {
+    margin: 1%;
+}
+
+.ic-pr{
+    position: relative;
+    float: left;
+    color: red;
+    margin: 10px;
+}
+
+.li-c {
+    list-style-type: none;
+}
+
+.li-li {
+    margin-top: 2%;
+    display: inline-block;
+    text-decoration: underline;
+    font-size: 20px;
+}
+
+.img-t-profil{
+    margin-left: 15%;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.bouton-t-profil{
+    margin-top:20px;
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color:rgba(40,57,101,.9);
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    font-family:"Tahoma";
+}
+
+.p-t-profil{
+    margin-top:20px;
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color:rgba(40,57,101,.9);
+    text-align: center;
+    width: 100%;
+    font-size: 18px;
+    font-family:"Tahoma";
+}

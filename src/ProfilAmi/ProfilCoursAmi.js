@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons'
 
 // Permet de décoder le token dans la sessionStorage
 const jwt = require('jsonwebtoken');
@@ -74,21 +76,26 @@ const ProfilCoursAmi = (urlid) => {
         <div>
             {decoded && (
                 <>
-                    <p>Ses cours :</p>
+                <div className="info-box-profil">
+                    <h2>Ses cours :</h2>
                     {pdfBd && pdfBd.map(element => {
                         var src = 'data:'+element.pdf.contentType+';base64,'+arrayBufferToBase64(element.pdf.data.data);
                         return (
-                            <div key={element.titre + 'rr'}>                            
-                                <Link key={element.titre + 'tt'} to={{
-                                    pathname: '/PrintPdf',
-                                    state: {src}
-                                }}>
-                                    {element.titre}
-                                </Link>
+                            <div className="pdf-di" key={element.titre + 'rr'}>
+                                <li key={element.titre + 'ii'} className="li-c">
+                                    <FontAwesomeIcon size="3x" className="ic-pr" icon={faFilePdf}/>
+                                    <Link className="li-li" key={element.titre + 'tt'} to={{
+                                        pathname: '/PrintPdf',
+                                        state: {src}
+                                    }}>
+                                        {element.titre}
+                                    </Link>
+                                </li>
                             </div>
 
                         )
                     })}
+                </div>
                 </>
             )}
             {!decoded && (

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons'
 
 // Permet de décoder le token dans la sessionStorage
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// BACKEND Fini / STYLE A FAIRE
+// FINI
 
 const ProfilCours = () => {
     /* ---------------------------------------------------------------------
@@ -86,6 +88,15 @@ const ProfilCours = () => {
         return window.btoa(binary);
     };
 
+    // Gère l'affichage du bouton
+    function handleClick(e) {
+        e.preventDefault();
+        var a = document.getElementById('icil');
+        var b = document.getElementById('lal');
+        a.style.display = 'none';
+        b.style.display = 'block';
+    }
+
 
     /* ---------------------------------------------------------------------
     HTML
@@ -96,27 +107,37 @@ const ProfilCours = () => {
         <div>
             {decoded && (
                 <>
-                    <p>Mes cours :</p>
-                    {pdfBd && pdfBd.map(element => {
-                        var src = 'data:'+element.pdf.contentType+';base64,'+arrayBufferToBase64(element.pdf.data.data);
-                        return (
-                            <div key={element.titre + 'rr'}>                            
-                                <Link key={element.titre + 'tt'} to={{
-                                    pathname: '/PrintPdf',
-                                    state: {src}
-                                }}>
-                                    {element.titre}
-                                </Link>
-                            </div>
+                    <div className="info-box-profil">
+                        <h2>Mes cours :</h2>
+                        {pdfBd && pdfBd.map(element => {
+                            var src = 'data:'+element.pdf.contentType+';base64,'+arrayBufferToBase64(element.pdf.data.data);
+                            return (
+                                <div className="pdf-di" key={element.titre + 'rr'}>
+                                    <li className="li-c" key={element.titre + 'li'}>
+                                        <FontAwesomeIcon size="3x" className="ic-pr" icon={faFilePdf}/>
+                                        <Link className="li-li" key={element.titre + 'tt'} to={{
+                                            pathname: '/PrintPdf',
+                                            state: {src}
+                                        }}>
+                                            {element.titre}
+                                        </Link>
+                                    </li>                            
+                                </div>
 
-                        )
-                    })}
-                    <div>
-                        <form onSubmit={handlePdf}>
-                            <input required type="text" placeholder="Titre du pdf" value={nom} onChange={(e) => setNom(e.target.value)}/>
-                            <input type="file" accept=".pdf" onChange={(e) => setPdf(e.target.files[0])}/>
-                            <input type="submit" value="Ajouter"/>
-                        </form>
+                            )
+                        })}
+                        <div id="icil" className="cours-profil">
+                            <form onSubmit={handleClick}>
+                                <input className="bouton-profil" type="submit" value="Ajouter un PDF"/>
+                            </form>
+                        </div>
+                        <div id="lal" style={{display: 'none'}} className="cours-profil">
+                            <form onSubmit={handlePdf}>
+                                <input className='champ-c-profil' required type="text" placeholder="Titre du pdf" value={nom} onChange={(e) => setNom(e.target.value)}/>
+                                <input type="file" accept=".pdf" onChange={(e) => setPdf(e.target.files[0])}/>
+                                <input className="bouton-profil" type="submit" value="Ajouter"/>
+                            </form>
+                        </div>
                     </div>
                 </>
             )}

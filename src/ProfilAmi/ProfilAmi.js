@@ -34,12 +34,9 @@ const ProfilAmi = (props) => {
                     <NavBar/>
                 </div>
                 {/* Div principale avec l'affichage des informations personelles */}
-                <div className="test">
-                    <div>
+                <div className="test-profil">
+                    <div className="scor-profil">
                         <ProfilPrincipalAmi props={props}/>
-                    </div>
-                    {/* Div permettant à l'utilisateur d'upload ses cours */}
-                    <div>
                         <ProfilCoursAmi props={props}/>
                     </div>
                 </div>

@@ -108,7 +108,7 @@ const Publication = () => {
                     </div>
                     <div className="yyui">
                         <div className="pub">
-                            <h2 className='h2-pub'>Ajouter une publication</h2>
+                            <h2 className='h2-pub'>Ajouter une publication :</h2>
                             <form onSubmit={handleSubmit}>
                                 <textarea 
                                     id="ok"

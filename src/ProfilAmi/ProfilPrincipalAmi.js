@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// TODO : BACKEND fini / STYLE A FAIRE
+// FINI
 
 
 const ProfilPrincipalAmi = (urlid) => {
@@ -188,30 +188,33 @@ const ProfilPrincipalAmi = (urlid) => {
             {decoded && (
                 <>
                     {/* Div centrale avec les informations à modifier */}
-                    <div>
-                        <div>
-                            {imagebd && imagebd.map(image => {
-                                var src = 'data:'+image.img.contentType+";base64,"+arrayBufferToBase64(image.img.data.data);
-                                return (
-                                    <img key={src} src={src} alt="profile"/>
-                                )
-                            })}
+                    <div className="infos-box-profil">
+                        <div className="tr-profil">
+                            <h1 className="h1-profil">Profil de {prenombd} {nombd}</h1>
+                            <div className="image-profil">
+                                {imagebd && imagebd.map(image => {
+                                    var src = 'data:'+image.img.contentType+";base64,"+arrayBufferToBase64(image.img.data.data);
+                                    return (
+                                        <div className="img-t-profil">
+                                            <img className="i-profil" key={src} src={src} alt="profile"/>
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </div>
                         {/* Affichage normal des informations */}
                         <div id='data'>
-                            <h1>Profil de {prenombd} {nombd}</h1>
-                            <p>Ville : {villebd}</p>
-                            <p>Ecole : {ecolebd}</p>
-                            <p>Filière : {filierebd}</p>
-                            <p> Site Web : </p>
-                            <a href={sitebd} target="_blank" rel="noreferrer">Mon site</a>
-                            <p> Matière enseignée : {matierebd}</p>
+                            <p className="info-profil">Ville : {villebd}</p>
+                            <p className="info-profil">Ecole : {ecolebd}</p>
+                            <p className="info-profil">Filière : {filierebd}</p>
+                            <p className="info-profil"> Site Web : <a className="a-pr" href={sitebd} target="_blank" rel="noreferrer">Son site</a></p>
+                            <p className="info-profil"> Matière enseignée : {matierebd}</p>
                         </div>
                         <div>
                             <form onSubmit={addFriend}>
-                                <input id='sub' type="submit" value="Ajouter"/>
-                                <p id='bb' style={{display: 'none'}}>Vous êtes déjà ami</p>
-                                <p id='aa' style={{display: 'none'}}>Ami ajouté</p>
+                                <input className="bouton-t-profil" id='sub' type="submit" value="Ajouter"/>
+                                <p className="p-t-profil" id='bb' style={{display: 'none'}}>Vous êtes déjà ami</p>
+                                <p className="p-t-profil" id='aa' style={{display: 'none'}}>Ami ajouté</p>
                             </form>
                         </div>
                     </div>

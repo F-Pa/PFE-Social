@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../style/profil.css';
+
 
 // Permet de décoder le token dans la sessionStorage
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// TODO : BACKEND fini / STYLE A FAIRE
+// FINI
 
 
 const ProfilPrincipal = () => {
@@ -197,36 +199,44 @@ const ProfilPrincipal = () => {
                 <>
                     {/* Div centrale avec les informations à modifier */}
                     <div>
-                        <div>
-                            {imagebd && imagebd.map(image => {
-                                var src = 'data:'+image.img.contentType+";base64,"+arrayBufferToBase64(image.img.data.data);
-                                return (
-                                    <img key={src} src={src} alt="profile"/>
-                                )
-                            })}
-                            <div id="img">
-                                <form onSubmit={handleClick}>
-                                    <input type="submit" value="Modifier l'image"/>
-                                </form>
-                            </div>
-                            <div id="image" style={{display: 'none'}}>
-                                <form onSubmit={handleImage}>
-                                    <input type="file" onChange={(e) => setImage(e.target.files[0])}/>
-                                    <input type="submit" value="Enregistrer"/>
-                                </form>
-                            </div>
-                        </div>
                         {/* Affichage normal des informations */}
-                        <div id='data'>
-                            <h1>Bienvenue {decoded.userPrenom} {decoded.userNom}</h1>
-                            <p>Ville : {villebd}</p>
-                            <p>Ecole : {ecolebd}</p>
-                            <p>Filière : {filierebd}</p>
-                            <p> Site Web : </p>
-                            <a href={sitebd} target="_blank" rel="noreferrer">Mon site</a>
-                            <p> Matière enseignée : {matierebd}</p>
+                        <div className="infos-box-profil" id='data'>
+                            <div className="tr-profil">
+                                <h1 className="h1-profil">Bienvenue {decoded.userPrenom} {decoded.userNom}</h1>
+                                <div className="image-profil">
+                                    {imagebd && imagebd.map(image => {
+                                        var src = 'data:'+image.img.contentType+";base64,"+arrayBufferToBase64(image.img.data.data);
+                                        return (
+                                            <>
+                                                <div className="img-profil" id="img">
+                                                    <img className="i-profil" key={src} src={src} alt="profile"/>
+                                                    <form onSubmit={handleClick}>
+                                                        <input className="bouton-profil" type="submit" value="Modifier l'image"/>
+                                                    </form>
+                                                </div>
+                                                <div className="img-spec-profil" id="image" style={{display: 'none'}}>
+                                                    <img className="i-profil" key={src} src={src} alt="profile"/>
+                                                    <div className="tt-profil">
+                                                        <form onSubmit={handleImage}>
+                                                            <input type="file" onChange={(e) => setImage(e.target.files[0])}/>
+                                                            <input className="bouton-spec-profil" type="submit" value="Enregistrer"/>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <h2>Mes informations :</h2>
+                            <p className="info-profil">Ville : {villebd}</p>
+                            <p className="info-profil">Ecole : {ecolebd}</p>
+                            <p className="info-profil">Filière : {filierebd}</p>
+                            <p className="info-profil"> Site Web : <a className="a-pr" href={sitebd} target="_blank" rel="noreferrer">Mon site</a></p>
+                            <p className="info-profil"> Matière enseignée : {matierebd}</p>
                             <form onSubmit={handleModifyProfil}>
                                 <input
+                                    className="bouton-profil"
                                     type= 'submit'
                                     value='Modifier mes infos'
                                 />
@@ -235,43 +245,49 @@ const ProfilPrincipal = () => {
                         {/* On affiche cette div si l'utilisateur a souhaité modifier des informations */}
                         <div id="modify" style={{display: 'none'}}>
                             <form onSubmit={handleDataProfil}>
-                                <h1> Renseignez les champs suivants : </h1>
-                                <label>Ville : </label>
-                                <input 
+                                <h1 className="h1-profil-is"> Renseignez les champs suivants : </h1>
+                                <label className="label-profil">Ville : </label>
+                                <input
+                                    className="champ-profil" 
                                     type='text'
                                     placeholder='Ville'
                                     value={ville}
                                     onChange={(e) => setVille(e.target.value)}
                                 />
-                                <label>Ecole : </label>
-                                <input 
+                                <label className="label-profil">Ecole : </label>
+                                <input
+                                    className="champ-profil" 
                                     type='text'
                                     placeholder='Ecole'
                                     value={ecole}
                                     onChange={(e) => setEcole(e.target.value)}
                                 />
-                                <label>Filière : </label>
-                                <input 
+                                <label className="label-profil">Filière : </label>
+                                <input
+                                    className="champ-profil" 
                                     type='text'
                                     placeholder='Filière'
                                     value={filiere}
                                     onChange={(e) => setFiliere(e.target.value)}
                                 />
-                                <label>Site : </label>
-                                <input 
+                                <label className="label-profil">Site : </label>
+                                <input
+                                    className="champ-profil" 
                                     type='text'
-                                    placeholder='Adresse du site web'
+                                    placeholder='URL du site web'
                                     value={site}
                                     onChange={(e) => setSite(e.target.value)}
                                 />
-                                <label>Matière : </label>
-                                <input 
+                                <label className="label-profil">Matière : </label>
+                                <input
+                                    className="champ-profil" 
                                     type='text'
                                     placeholder='Matière enseignée'
                                     value={matiere}
                                     onChange={(e) => setMatiere(e.target.value)}
                                 />
                                 <input
+                                    className="bouton-profil"
                                     type='submit'
                                     value='Enregistrer'
                                 />
