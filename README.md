@@ -13,4 +13,4 @@ Créer un .env dans le backend avec :
 Créer un .env dans l'application avec :
   - REACT_APP_JWTSECRET = la même clé secrète que dans le backend
   
-Une fois ces étapes passées, vous pouvez lancer le backend et l'application séparémment aevc nmp start.
+Une fois ces étapes passées, vous pouvez lancer le backend et l'application séparémment aevc npm start.
