@@ -92,7 +92,7 @@ router.post('/signup', (req, res) => {
             const token = jwt.sign(
                 {userId: idUnique, userEmail: email, userNom: nom, userPrenom: prenom},
                 process.env.JWTSECRET,
-                {expiresIn: 3000},
+                {expiresIn: 8000},
             );
             res.status(200).json({token});
             return;
@@ -139,7 +139,7 @@ router.post('/signin', (req, res) => {
                             const token = jwt.sign(
                                 {userId: record.get('id'), userEmail: email, userNom: record.get('nom'), userPrenom: record.get('prenom')},
                                 process.env.JWTSECRET,
-                                {expiresIn: 3000},
+                                {expiresIn: 8000},
                             );
                             res.status(200).json({token});
                             return;

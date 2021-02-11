@@ -27,6 +27,10 @@ const Amis = () => {
     const [resultat, setResultat] = useState();
     // Et les résultats de la recherche
     const [resultatR, setResultatR] = useState();
+    // Les résultats géographiques
+    const [resultatG, setResultatG] = useState();
+    // Les résultats du domaine
+    const [resultatD, setResultatD] = useState();
 
     // Récupère les noms et prénoms pour la recherche de personne
     const [nom, setNom] = useState('');
@@ -35,6 +39,8 @@ const Amis = () => {
     // Affiche une erreur si personne n'a été trouvée
     const [errorM, setErrorM] = useState('');
     const [errorR, setErrorR] = useState('');
+    const [errorG, setErrorG] = useState('');
+    const [errorD, setErrorD] = useState('');
 
 
     /* ---------------------------------------------------------------------
@@ -57,12 +63,14 @@ const Amis = () => {
     // Au chargement de la page on affiche les informations contenues dans la bdd
     useEffect(() => {
         getPersonne();
+        getPersonneLoc();
+        getPersonneDom();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
     // Cette fonction permet de rechercher les autres personnes dans la bdd
-    // Elle est optimisée avec un système de recommandation (TODO)
+    // Elle est optimisée avec un système de recommandation Ici Ami d'ami
     function getPersonne() {
         // Si il y a un token 
         if(decoded) {
@@ -76,6 +84,45 @@ const Amis = () => {
             })
             .catch(function(error) {
                 setErrorM(error.response.data.message);
+            })
+        }
+    }
+
+    // Cette fonction permet de rechercher les autres personnes dans la bdd
+    // Elle est optimisée avec un système de recommandation Ici localisation
+    function getPersonneLoc() {
+        // Si il y a un token 
+        if(decoded) {
+            const user_info = {
+                id: decoded.userId
+            }
+            axios.post('http://localhost:4000/app/amis/getPersonneLoc', user_info)
+            .then(function(res) {
+                setErrorG('');
+                setResultatG(res.data.resultat);
+            })
+            .catch(function(error) {
+                setErrorG(error.response.data.message);
+            })
+        }
+    }
+
+
+    // Cette fonction permet de rechercher les autres personnes dans la bdd
+    // Elle est optimisée avec un système de recommandation Ici le domaine
+    function getPersonneDom() {
+        // Si il y a un token 
+        if(decoded) {
+            const user_info = {
+                id: decoded.userId
+            }
+            axios.post('http://localhost:4000/app/amis/getPersonneDom', user_info)
+            .then(function(res) {
+                setErrorD('');
+                setResultatD(res.data.resultat);
+            })
+            .catch(function(error) {
+                setErrorD(error.response.data.message);
             })
         }
     }
@@ -199,11 +246,12 @@ const Amis = () => {
                                 </div>
                                 {/* Div principale avec l'affichage des informations personelles
                                 (Au chargement de la page) */}
-                                <div id="sugg">
+                                <div className="ladiv" id="sugg">
                                     <h2 className="h2-ami">Suggestions d'ami :</h2>
                                     <ul>
                                         {/* On affiche les personnes que l'on a récupéré au 
                                         chargement de la page dans le backend */}
+                                        <h2>Les amis de vos amis : </h2>
                                         {resultat && resultat.map(item => {
                                             return (
                                                 <div className="ami" key={item.id}>
@@ -225,8 +273,58 @@ const Amis = () => {
                                     {/* Erreur si la recherche dans le back n'a rien fourni*/}
                                     {errorM && <p>{errorM}</p>}
                                 </div>
-                                {/* Refresh la page */}
-                                <a className="link-ami" href="/Rencontre">D'autres Suggestions</a>
+                                <div className="ladiv" id="sugg">
+                                    <ul>
+                                        {/* On affiche les personnes que l'on a récupéré au 
+                                        chargement de la page dans le backend */}
+                                        <h2>Les gens proches de chez vous :</h2>
+                                        {resultatG && resultatG.map(item => {
+                                            return (
+                                                <div className="ami" key={item.id}>
+                                                    <form onSubmit={addFriend(item.id)}>
+                                                        <li className="card" key={item.nom +'li'}> 
+                                                            <Amiimage data={item.id}/>
+                                                            <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
+                                                            <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                            <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>
+                                                            <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                        </li>
+                                                    </form>
+                                                </div>
+                                            )
+                                        })}
+                                        {/* Sinon on affiche le chargement */}
+                                        {!resultatG && !errorG && <p>chargement ...</p>}
+                                    </ul>
+                                    {/* Erreur si la recherche dans le back n'a rien fourni*/}
+                                    {errorG && <p>{errorG}</p>}
+                                </div>
+                                <div className="ladiv" id="sugg">
+                                    <ul>
+                                        {/* On affiche les personnes que l'on a récupéré au 
+                                        chargement de la page dans le backend */}
+                                        <h2>Dans le même domaine que vous :</h2>
+                                        {resultatD && resultatD.map(item => {
+                                            return (
+                                                <div className="ami" key={item.id}>
+                                                    <form onSubmit={addFriend(item.id)}>
+                                                        <li className="card" key={item.nom +'li'}> 
+                                                            <Amiimage data={item.id}/>
+                                                            <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
+                                                            <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                                            <input className="button" id={item.id} key={item.id} type="submit" value="Ajouter"/>
+                                                            <p className="p-ami" id={item.id + 'aa'} style={{display: 'none'}}>Ami ajouté</p>
+                                                        </li>
+                                                    </form>
+                                                </div>
+                                            )
+                                        })}
+                                        {/* Sinon on affiche le chargement */}
+                                        {!resultatD && !errorD && <p>chargement ...</p>}
+                                    </ul>
+                                    {/* Erreur si la recherche dans le back n'a rien fourni*/}
+                                    {errorD && <p>{errorD}</p>}
+                                </div>
                             </div>
                         </div>
                     </div>

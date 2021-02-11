@@ -113,9 +113,9 @@ function findProfile(id) {
 
 
 // Crée le profil
-function createProfil(id, ville, ecole, filiere, site, matiere) {
+async function createProfil(id, ville, ecole, filiere, site, matiere) {
     const session3 = driver.session();
-    session.writeTransaction((tcx) =>
+    await session.writeTransaction((tcx) =>
         tcx.run(`CREATE (p:Profil {Id:$userId, Ville:$userVille, Ecole:$userEcole, 
                 Filiere:$userFiliere, Site:$userSite, Matiere:$userMatiere})`,
             {
@@ -131,7 +131,7 @@ function createProfil(id, ville, ecole, filiere, site, matiere) {
             throw error;
         })
     )
-    session3.writeTransaction((tcx) => 
+    session3.writeTransaction((tcx) =>
     tcx.run(`MATCH (u:Utilisateur)
             WITH u
             MATCH (p:Profil)
@@ -141,6 +141,9 @@ function createProfil(id, ville, ecole, filiere, site, matiere) {
             userId: id
         }
     )
+    .then(() => {
+        console.log('ici');
+    })
     .catch(error => {
         throw error;
     })

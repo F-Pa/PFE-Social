@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons'
 
+import Amiimage from '../Amis/Amiimage'
+
 // Permet de décoder le token dans la sessionStorage
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// BACKEND Fini / STYLE A FAIRE
+// Fini
 
 const ProfilCoursAmi = (urlid) => {
     /* ---------------------------------------------------------------------
@@ -19,6 +21,9 @@ const ProfilCoursAmi = (urlid) => {
 
     // Récupère les pdfs de l'utilisateur dans la bdd
     const [pdfBd, setPdfBd] = useState();
+
+    // Récupère les informations sur les amis de l'utilisateur
+    const [resultat, setResultat] = useState();
 
 
     /* ---------------------------------------------------------------------
@@ -41,8 +46,28 @@ const ProfilCoursAmi = (urlid) => {
     // Au chargement de la page on affiche les informations contenues dans la bdd
     useEffect(() => {
         getPdf();
+        getFriend();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Permet de récupérer les amis de l'utilisateur dans la bdd
+    function getFriend() {
+        if(decoded) {
+            var a = document.getElementById('nofriend');
+            const user_info = {
+                idu: decoded.userId,
+                idp: urlid.props.match.params.id
+            }
+            axios.post('http://localhost:4000/app/amis/getFriendBis', user_info)
+            .then(function(res) {
+                a.style.display = 'none';
+                setResultat(res.data.resultat);
+            })
+            .catch(function(error) {
+                a.style.display = 'block';
+            })
+        }
+    }
 
 
     // Récupère les pdfs de l'utilisateur
@@ -95,6 +120,27 @@ const ProfilCoursAmi = (urlid) => {
 
                         )
                     })}
+                </div>
+                <div className="info-box-profil">
+                    <h2>Ses amis :</h2>
+                    <ul>
+                        {/* Amis récupérés dans le backend au
+                        chargement de la page */}
+                        {resultat && resultat.map(item => {
+                            return (
+                                <div className="ami" key={item.id}>
+                                    <li className="card-spec" key={item.id + 'li'}>
+                                        <Amiimage data={item.id}/>
+                                        <p className="name" key={item.nom}>{item.prenom} {item.nom}</p>
+                                        <a className="a-ami" key={item.id + 'bb'} href={'/ProfilUtilisateur/'+item.id}>Page de profil</a>
+                                    </li>
+                                </div>
+                            )
+                        })}
+                    </ul>
+                    <div className="div-ami" id='nofriend' style={{display: 'none'}}>
+                        <p className="p-a">Cette personne n'a pas d'ami</p>
+                    </div>
                 </div>
                 </>
             )}

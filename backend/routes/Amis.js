@@ -15,8 +15,6 @@ const _ = require('lodash');
 
 // On se connecte au driver neo4j, Nécéssite la clé (.env)
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', process.env.DB_UTIL_PASS));
-const session = driver.session();
-const session2 = driver.session();
 
 
 /*--------------------------------------------------------------------
@@ -24,16 +22,16 @@ Affichage des personnes n'étant pas ami avec l'utilisateur
 Et étant recommandé
 --------------------------------------------------------------------*/
 
-// Récupère les personnes dans la bdd (limité à 9)
-// Elles correspondent au système de recommendation TODO
+// Récupère les personnes dans la bdd (limité à 10)
+// Elles correspondent au système de recommendation / ici ami d'ami
 router.post('/getPersonne', (req, res) => {
     const session3 = driver.session();
     session3.readTransaction((tcx) => 
-        tcx.run(`MATCH (u:Utilisateur {Id:$userId})
-                WITH u
-                MATCH (p:Utilisateur)
-                WHERE NOT (p)-[:EST_AMI]-(u) AND NOT (p.Id = $userId)
-                RETURN p.Id as id, p.Nom as nom, p.Prenom as prenom
+        tcx.run(`MATCH (u:Utilisateur {Id:$userId})-[r:EST_AMI]->(p)
+                WITH p, u 
+                MATCH (p:Utilisateur)-[e:EST_AMI]->(x)
+                WHERE NOT (x)-[:EST_AMI]->(u) AND NOT (x.Id = $userId)
+                RETURN x.Id as id, x.Nom as nom, x.Prenom as prenom
                 LIMIT 10`,
             {
                 userId: req.body.id
@@ -65,6 +63,88 @@ router.post('/getPersonne', (req, res) => {
 })
 
 
+// Récupère les personnes dans la bdd (limité à 9)
+// Elles correspondent au système de recommendation / ici localisé
+router.post('/getPersonneLoc', (req, res) => {
+    const session4 = driver.session();
+    session4.readTransaction((tcx) => 
+        tcx.run(`MATCH (u:Utilisateur {Id:$userId})-[x:A_POUR_PROFIL]-(e)
+                WITH u, e
+                MATCH (p:Utilisateur)-[r:A_POUR_PROFIL]-(d)
+                WHERE ((d.Ville = e.Ville) OR (d.Ecole = e.Ecole)) AND NOT (p.Id = $userId) AND NOT (p)-[:EST_AMI]->(u)
+                RETURN p.Id as id, p.Nom as nom, p.Prenom as prenom
+                LIMIT 10`,
+            {
+                userId: req.body.id
+            }
+        )
+        .then(result => {
+            // Si on ne trouve personne 
+            if(_.isEmpty(result.records)) {
+                return res.status(404).json({error: true, message: 'Avez-vous renseigné votre profil ? Personne ne correspond à votre localisation'})
+            }
+            // Sinon on affiche les personnes trouvées
+            else {
+                const resultat = [];
+                result.records.map(record => {
+                    let util = {
+                        id: record.get('id'),
+                        nom: record.get('nom'),
+                        prenom: record.get('prenom')
+                    };
+                    resultat.push(util);
+                })
+                res.status(200).json({resultat});
+            }
+        })
+        .catch(error => {
+            throw error;
+        })
+    )
+})
+
+
+// Récupère les personnes dans la bdd (limité à 9)
+// Elles correspondent au système de recommendation / ici domaine
+router.post('/getPersonneDom', (req, res) => {
+    const session5 = driver.session();
+    session5.readTransaction((tcx) => 
+        tcx.run(`MATCH (u:Utilisateur {Id:$userId})-[x:A_POUR_PROFIL]-(e)
+                WITH u, e
+                MATCH (p:Utilisateur)-[r:A_POUR_PROFIL]-(d)
+                WHERE ((d.Filiere = e.Filiere) OR (d.Matiere = e.Matiere)) AND NOT (p.Id = $userId) AND NOT (p)-[:EST_AMI]->(u)
+                RETURN p.Id as id, p.Nom as nom, p.Prenom as prenom
+                LIMIT 10`,
+            {
+                userId: req.body.id
+            }
+        )
+        .then(result => {
+            // Si on ne trouve personne 
+            if(_.isEmpty(result.records)) {
+                return res.status(404).json({error: true, message: 'Avez-vous renseigné votre profil ? Personne ne correspond à votre domaine d\'étude'})
+            }
+            // Sinon on affiche les personnes trouvées
+            else {
+                const resultat = [];
+                result.records.map(record => {
+                    let util = {
+                        id: record.get('id'),
+                        nom: record.get('nom'),
+                        prenom: record.get('prenom')
+                    };
+                    resultat.push(util);
+                })
+                res.status(200).json({resultat});
+            }
+        })
+        .catch(error => {
+            throw error;
+        })
+    )
+})
+
+
 /*--------------------------------------------------------------------
 Ajout et suppression d'amis
 --------------------------------------------------------------------*/
@@ -73,6 +153,7 @@ Ajout et suppression d'amis
 // Ajoute une relation entre l'utilisateur et la personne selectionnée
 // Crée une discussion entre ces deux personnes
 router.post('/addFriend', (req, res) => {
+    const session = driver.session();
     session.writeTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userIdu})
                 WITH u
@@ -92,6 +173,7 @@ router.post('/addFriend', (req, res) => {
 })
 
 router.post('/removeFriend', (req, res) => {
+    const session = driver.session();
     const session4 = driver.session();
     console.log(req.body);
     session.writeTransaction((tcx) => 
@@ -133,6 +215,7 @@ Affichage des amis de l'utilisateur sur la page AffichageAmi (MesAmis)
 
 
 router.post('/getFriend', (req, res) => {
+    const session = driver.session();
     session.readTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userId})-[:EST_AMI]->(p)
                 RETURN p.Id as id, p.Nom as nom, p.Prenom as prenom`,
@@ -166,6 +249,44 @@ router.post('/getFriend', (req, res) => {
 })
 
 
+router.post('/getFriendBis', (req, res) => {
+    const session = driver.session();
+    session.readTransaction((tcx) => 
+        tcx.run(`MATCH (u:Utilisateur {Id:$userId})-[:EST_AMI]->(p)
+                WHERE NOT p.Id = $userIdu
+                RETURN p.Id as id, p.Nom as nom, p.Prenom as prenom`,
+            {
+                userIdu: req.body.idu,
+                userId: req.body.idp
+            }
+        )
+        .then(result => {
+            // Si la personne n'a pas d'ami
+            if(_.isEmpty(result.records)){
+                res.status(404).json({error: true, message: 'Vous n\'avez pas encore d\'ami'})
+            }
+            // Sinon on affiche les personnes trouvées
+            else {
+                const resultat = [];
+                result.records.map(record => {
+                    let util = {
+                        id: record.get('id'),
+                        nom: record.get('nom'),
+                        prenom: record.get('prenom')
+                    };
+                    resultat.push(util);
+                })
+                res.status(200).json({resultat});
+            }
+        })
+        .catch(error => {
+            throw error;
+        })
+    )
+})
+
+
+
 /*--------------------------------------------------------------------
 Recheche d'une personne spécifique
 --------------------------------------------------------------------*/
@@ -173,6 +294,8 @@ Recheche d'une personne spécifique
 // Permet la recherche d'une personne spécifique (par nom et prénom)
 // L'utilisateur ne peut pas se rechercher lui-même d'où l'usage de l'id
 router.post('/searchFriend', (req, res) => {
+    const session = driver.session();
+    const session2 = driver.session();
     session.readTransaction((tcx) =>
         tcx.run(`MATCH (u:Utilisateur {Id:$userIdu})
                 WITH u
@@ -281,6 +404,7 @@ Vérifie si l'utilisateur est déjà ami avec la personne
 
 // Vérifie si deux personnes données sont amis
 router.post('/isFriend', (req, res) => {
+    const session = driver.session();
     session.readTransaction((tcx) => 
         tcx.run(`MATCH (u:Utilisateur {Id:$userIdu})-[:EST_AMI]-(p:Utilisateur {Id:$userIdp})
                 RETURN u`,
