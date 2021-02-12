@@ -19,7 +19,7 @@ function App() {
     <Router>
     <div className="App">
       <Switch>
-        <Route path="/" exact component={Home}/>
+        <Route path="/" exact component={Signin}/>
         <Route path="/Signin" component={Signin}/>
         <Route path="/Signup" component={Signup}/>
         <Route path="/Oups" component={Mdp}/>
